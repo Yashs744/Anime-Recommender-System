@@ -1,0 +1,67 @@
+swagger: "2.0"
+info:
+  description: Anime Recommendation System.
+  version: "1.0.0"
+  title: REST API for Recommending Animes to Users.
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+# Paths supported by the server application
+paths:
+  /anime:
+    get:
+      operationId: Anime.returnRecommended
+      tags:
+        - Anime
+      summary: Recommendation System for recommending anime to Users which are similar to the given Anime based on the Synopsis, Genre & Ratings.
+      description: Recommend Anime based on Synopsis, Genre & Rating
+      parameters:
+        - name: anime_name
+          in: query
+          type: string
+          description: Name of the Anime for the system to recommend similar Anime.
+          required: true
+      responses:
+        200:
+          description: SUCCESS.
+          schema:
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
+                synopsis:
+                  type: string
+                genre:
+                  type: string
+                  
+    post:
+      operationId: Anime.createRatings
+      tags:
+        - Anime
+      summary: Create Ratings in the form of 1 or 0 between the given Anime and Anime recommended.
+      description: Create Rating between Anime.
+      parameters:
+        - name: anime_ratings
+          in: body
+          description: Anime Ratings either 1 or 0
+          required: True
+          schema:
+            type: object
+            properties:
+              main_anime_name:
+                type: string
+                description: Name of the given Anime to find Recommendations.
+              recomm_anime_name:
+                type: string
+                description: Name of the Recommended Anime
+              rating:
+                type: integer
+                description: Rating either 1 or 0.
+      responses:
+        201:
+          description: Successfully Added Rating.

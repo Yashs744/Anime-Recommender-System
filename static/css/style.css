@@ -1,0 +1,14 @@
+body            { font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;}
+a, h1, h2       { color: #377ba8; }
+
+table.table {
+  text-align:center;
+}
+
+
+/*
+tr:nth-child(odd)	{ background-color:#eee; }
+tr:nth-child(even)	{ background-color:#fff; }
+*/
+
+tr:hover            { background-color: #e2edf0;}

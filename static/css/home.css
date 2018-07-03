@@ -1,0 +1,67 @@
+body            { font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;}
+a, h1, h2       { color: #377ba8; }
+h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+#getSimilar {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 2px;
+    border-radius: 6px;
+    cursor: pointer;    
+}
+
+#getSimilar:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    border-radius: 7px;
+}
+
+.anime_content {
+    display: none;
+}
+#input_box {
+    
+    padding: 10px;
+    margin: 1em;
+}
+
+.col-md-4 {
+    display: flex; 
+    flex-basis: 100%;
+}
+
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);}
+
+.like-center-me {
+    max-width: 100px;
+    margin: auto;
+    align-items: baseline;
+}
+
+table.animes, .dataframe th, .dataframe td {
+  border: none;
+  border-bottom: 2px solid #C8C8C8;
+  border-collapse: collapse;
+  text-align:center;
+  padding: 10px;
+  margin-bottom: 40px;
+  font-size: 0.92em;
+}
+
+table.dataframe {
+	height: 100%;
+  width: 100%;
+}
+
+tr:nth-child(odd)	{ background-color:#eee; }
+tr:nth-child(even)	{ background-color:#fff; }
+
+tr:hover            { background-color: #ffff98;}
