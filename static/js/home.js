@@ -80,8 +80,9 @@ ns.view = (function() {
                     rows += `
                             <div class="col-md-4">
                                 <div class="card mb-4 box-shadow">
+                                    <img class="card-img-top" src="${anime_list[i].img_url}" alt="Card image cap">
                                     <div class="card-body">
-                                        <p class="card-text" id = "recomm_name-${i}"><b>NAME: </b>${anime_list[i].name}</p>
+                                        <p class="card-text" id = "recomm_name-${i}" style = "text-align:center">${anime_list[i].name}</p>
                                         <p class="card-text"><b>Synopsis: </b>${anime_list[i].synopsis}</p>
                                         <p class="card-text"><b>Genre: </b>${anime_list[i].genre}</p>
                                         <div class="d-flex justify-content-between align-items-center">
@@ -170,7 +171,7 @@ ns.controller = (function(m, v) {
         let anime_name = $anime_name.val(),
             recomm_name = $(this).parent().parent().parent()[0].childNodes[1].innerHTML,
             rating = 1;
-            
+
         recomm_name = recomm_name.substring(13);
 
         if (validate_rating(anime_name, recomm_name, rating)) {
@@ -185,7 +186,7 @@ ns.controller = (function(m, v) {
         let anime_name = $anime_name.val(),
             recomm_name = $(this).parent().parent().parent()[0].childNodes[1].innerHTML,
             rating = 0;
-            
+
         recomm_name = recomm_name.substring(13);
 
         if (validate_rating(anime_name, recomm_name, rating)) {
@@ -197,10 +198,10 @@ ns.controller = (function(m, v) {
     };
 
     /*
-    function sample() { 
+    function sample() {
         var name = $(this).parent().parent().parent()[0].childNodes[1].innerHTML;
         name = name.substring(13);
-        
+
         console.log(name);
     }
     */

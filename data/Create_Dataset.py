@@ -59,7 +59,8 @@ for ID in id_list:
 				anime = (ID, anime_json_data['title'], str(anime_json_data['synopsis']),
 					anime_json_data['episodes'], anime_json_data['premiered'], genres, anime_json_data['rating'],
 					anime_json_data['score'], anime_json_data['scored_by'], anime_json_data['rank'],
-					anime_json_data['popularity'], anime_json_data['members'], anime_json_data['favorites'])
+					anime_json_data['popularity'], anime_json_data['members'], anime_json_data['favorites'],
+					anime_json_data['image_url'])
 
 				# Add the Tuple to the main list.
 				anime_content.append(anime)
@@ -83,7 +84,7 @@ for ID in id_list:
 
 # Create a Pandas DataFrame for the anime information collected
 df = pd.DataFrame(anime_content,
-	columns = ["ID", "Title", "Syponsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites"])
+	columns = ["ID", "Title", "Syponsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"])
 
 # Save the DataFrame as an CSV File.
 df.to_csv('Anime.csv', index = False)

@@ -32,13 +32,17 @@ paths:
             type: array
             items:
               properties:
+                id:
+                  type: integer
                 name:
                   type: string
                 synopsis:
                   type: string
                 genre:
                   type: string
-                  
+                img_url:
+                  type: string
+
     post:
       operationId: Anime.createRatings
       tags:
