@@ -41,7 +41,7 @@ class AnimeRecommendation:
     def getSimilartiyMatrix(self):
         '''
             GET Similarity Matrix for Anime Dataset based on Synopsis, Genre & Rating.
-            Similariity Matrix are obtained using TfidfVectorize on Synopsis & Genre and 
+            Similariity Matrix are obtained using TfidfVectorize on Synopsis & Genre and
             CountVectorizer on Ratings followed by a linear_kernel().
 
             Cleaned Version of Synopsis, Genre and Rating are passed to the Vectorizers.
@@ -50,7 +50,7 @@ class AnimeRecommendation:
                 None
 
             :return:
-                A list of 3 Similarity Metrices 
+                A list of 3 Similarity Metrices
                     - Synopsis
                     - Genre
                     - Rating
@@ -70,7 +70,7 @@ class AnimeRecommendation:
     def getID(self, anime_name):
         '''
             GET the ID of the Anime given Name of the Anime.
-            
+
             getID() uses Anime Dataset to get the mapping of Anime Name to Anime ID.
             Function can return one or more ID's.
 
@@ -121,6 +121,18 @@ class AnimeRecommendation:
         '''
         return self.dataframe[['Anime_ID', 'Genre']][self.dataframe['Anime_ID'] == anime_id].iloc[0]['Genre']
 
+    def getImage(self, anime_id):
+        '''
+            GET the Images of the Anime.
+
+            Parameters:
+                anime_id: ID of the Anime.
+
+            :return:
+                Image URL
+        '''
+        return self.dataframe[['Anime_ID', 'Image_URL']][self.dataframe['Anime_ID'] == anime_id].iloc[0]['Image_URL']
+
     def getMapping(self):
         '''
             Mapping of Anime Dataset Index to Anime ID.
@@ -151,30 +163,30 @@ class AnimeRecommendation:
 
         # Get the Index of the Anime.
         idx = indices[anime_id]
-        
+
         # We have 3 Similarity Metrics
         ## 1. Synopsis Similarity
         ## 2. Genre Similarity
         ## 3. Rating Similarity
-        
+
         score_1 = list(enumerate(similarity_matrix[0][idx]))
         score_2 = list(enumerate(similarity_matrix[0][idx]))
         score_3 = list(enumerate(similarity_matrix[0][idx]))
-        
+
         # Sort the scores in reverse order
         score_1 = sorted(score_1, key = lambda x: x[0], reverse = False)
-        score_2 = sorted(score_2, key = lambda x: x[0], reverse = False)    
+        score_2 = sorted(score_2, key = lambda x: x[0], reverse = False)
         score_3 = sorted(score_3, key = lambda x: x[0], reverse = False)
-        
+
         # Combining the Similarity Matrix
         combined_score = [(idx, np.mean([sc_1, sc_2, sc_3])) for (idx, sc_1), (_, sc_2), (_, sc_3) in zip(score_1, score_2, score_3)]
-        
+
         # Sorting the Combined Score.
         combined_score = sorted(combined_score, key = lambda x: x[1], reverse = True)
-        
+
         # Get ID of Top 10 Similar Animes
         anime_ids = [i[0] for i in combined_score[:10]]
-        
+
         # Returning the Top Anime Names.
         return self.dataframe['Anime_ID'].iloc[anime_ids].values
 
@@ -192,7 +204,8 @@ class AnimeRecommendation:
         anime_dict = OrderedDict([
             ("name", self.getTitle(anime_id)),
             ("synopsis", self.getSynopsis(anime_id)),
-            ("genre", self.getGenre(anime_id))
+            ("genre", self.getGenre(anime_id)),
+            ("img_url", self.getImage(anime_id))
         ])
 
         return anime_dict

@@ -32,8 +32,6 @@ paths:
             type: array
             items:
               properties:
-                id:
-                  type: integer
                 name:
                   type: string
                 synopsis:
