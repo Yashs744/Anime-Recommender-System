@@ -6,7 +6,7 @@ from flask import make_response, jsonify
 from model import Ratings
 
 # Load the Dataset
-dataframe = pd.read_csv('cleaned_anime_data.csv')
+dataframe = pd.read_csv('data/cleaned_anime_data.csv')
 dataframe = dataframe.reset_index()
 dataframe = dataframe.drop('index', axis = 1)
 
@@ -72,7 +72,7 @@ def createRatings(anime_ratings):
 		:return:
 			201 Succes or 400 Error
 	'''
-	
+
 	main_anime = anime_ratings.get('main_anime_name', None)
 	recomm_anime = anime_ratings.get('recomm_anime_name', None)
 	rating = anime_ratings.get('rating', None)
@@ -81,7 +81,7 @@ def createRatings(anime_ratings):
 		# Get the ID
 		idx_1 = anime.getID(main_anime.lower())
 		idx_2 = anime.getID(recomm_anime.lower())
-		
+
 		counts = ratings.addRating(rating_data = (idx_1, idx_2, rating))
 
 		if counts == 10:
