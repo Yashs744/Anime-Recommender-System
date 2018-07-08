@@ -1,0 +1,5 @@
+connexion
+flask
+scikit-sklearn
+pandas
+numpy
