@@ -1,5 +1,5 @@
 connexion
 flask
-scikit-sklearn
+scikit-learn
 pandas
 numpy
