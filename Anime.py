@@ -39,15 +39,15 @@ def returnRecommended(anime_name):
 
 	anime_name = anime_name.lower()
 
-	anime_Idx = dataframe[dataframe.Title.str.lower().str.contains(anime_name)]['Anime_ID'].values
+	anime_Idx = anime.getID(anime_name)#dataframe[dataframe.Title.str.lower().str.contains(anime_name)]['Anime_ID'].values
 
-	if len(anime_Idx) > 2:
+	if len(anime_Idx) > 1:
 		for idx in anime_Idx:
 			recommended_animes['output']['animes'].append(anime.build_AnimeDict(idx))
 
 	else:
 		# Get Anime ID
-		anime_id = anime.getID(anime_name)
+		anime_id = anime.getID(anime_name)[0]
 		recommended_animes['input'].append(anime.build_AnimeDict(anime_id))
 
 		g = anime.getRecommendation(anime_id, simMatrix, indices)
