@@ -80,10 +80,10 @@ class AnimeRecommendation:
             :return:
                 ID or list of ID's.
         '''
-        if self.dataframe['Title'][self.dataframe.Title.str.lower() == anime_name].any() != False:
-            return self.dataframe[['Anime_ID', 'Title']][self.dataframe.Title.str.lower() == anime_name].iloc[0]['Anime_ID']
+        if self.dataframe[['Anime_ID', 'Title']][self.dataframe.Title.str.lower() == anime_name]['Anime_ID'].any():
+            return self.dataframe[['Anime_ID', 'Title']][self.dataframe.Title.str.lower() == anime_name]['Anime_ID'].values
 
-        return self.dataframe[['Anime_ID', 'Title']][self.dataframe.Title.str.lower().str.contains(anime_name)].iloc[0]['Anime_ID']
+        return self.dataframe[['Anime_ID', 'Title']][self.dataframe.Title.str.lower().str.contains(anime_name)]['Anime_ID'].values
 
     def getTitle(self, anime_id):
         '''
