@@ -5,18 +5,21 @@
 	Third Party Tool Used: Jikan (https://github.com/jikan-me/jikan) as an API Endpoint of MAL.
 '''
 
-from fetch_anime import *
+from fetch_anime import getTopAnime
+import pandas as pd
+import requests
 import json
 
 # Base Url for fetching information.
 BaseURL = "http://api.jikan.moe/anime/{}"
 
-# ID, Title English, Syponsis, Episodes, Premiered, Genre, Rating, Score, Scored_By, Rank, Popularity, Members, Favorites
+# ID, Title English, Synopsis, Episodes, Premiered, Genre, Rating, Score, Scored_By, Rank, Popularity, Members, Favorites, Image_URL
 anime_content = list()
 
 # Read the File that Contains Anime ID
-df = pd.read_csv('AnimeList.csv')
+df = getTopAnime(start = 0, end = 1000, save_df = True)
 id_list = list(df['IDs'])
+
 # Deleting df to save memory.
 del df
 
@@ -84,7 +87,7 @@ for ID in id_list:
 
 # Create a Pandas DataFrame for the anime information collected
 df = pd.DataFrame(anime_content,
-	columns = ["ID", "Title", "Syponsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"])
+	columns = ["ID", "Title", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"])
 
 # Save the DataFrame as an CSV File.
 df.to_csv('Anime.csv', index = False)
