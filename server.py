@@ -38,5 +38,9 @@ def available_animes():
 
 	return render_template('animes.html', tables=[output_html])
 
+@app.route('/404')
+def not_found():
+	return render_template('404.html')
+
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=8000, debug=True)
