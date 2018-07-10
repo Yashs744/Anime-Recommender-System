@@ -41,21 +41,24 @@ def returnRecommended(anime_name):
 
 	anime_Idx = anime.getID(anime_name)#dataframe[dataframe.Title.str.lower().str.contains(anime_name)]['Anime_ID'].values
 
-	if len(anime_Idx) > 1:
-		for idx in anime_Idx:
-			recommended_animes['output']['animes'].append(anime.build_AnimeDict(idx))
+	try:
+		if len(anime_Idx) > 1:
+			for idx in anime_Idx:
+				recommended_animes['output']['animes'].append(anime.build_AnimeDict(idx))
 
-	else:
-		# Get Anime ID
-		anime_id = anime.getID(anime_name)[0]
-		recommended_animes['input'].append(anime.build_AnimeDict(anime_id))
+		else:
+			# Get Anime ID
+			anime_id = anime.getID(anime_name)[0]
+			recommended_animes['input'].append(anime.build_AnimeDict(anime_id))
 
-		g = anime.getRecommendation(anime_id, simMatrix, indices)
+			g = anime.getRecommendation(anime_id, simMatrix, indices)
 
-		for idx in g:
-			recommended_animes['output']['animes'].append(anime.build_AnimeDict(idx))
+			for idx in g:
+				recommended_animes['output']['animes'].append(anime.build_AnimeDict(idx))
 
-	return recommended_animes
+		return recommended_animes
+	except Exception as e:
+		return make_response(jsonify({'Success': False, 'Message': str(e)}), 404)
 
 def createRatings(anime_ratings):
 	'''
