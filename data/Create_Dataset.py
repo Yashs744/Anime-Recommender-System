@@ -5,10 +5,36 @@
 	Third Party Tool Used: Jikan (https://github.com/jikan-me/jikan) as an API Endpoint of MAL.
 '''
 
-from fetch_anime import getTopAnime
+from fetch_anime import getTopAnimes, getSeasonalAnimes
 import pandas as pd
 import requests
 import json
+import time
+
+def save_df(values, cols, filename):
+	# Create a Pandas DataFrame & save it to the disk in CSV Format
+	pd.DataFrame(values, columns = cols).to_csv(filename, index = False)
+
+'''
+# Top Animes
+
+## Read the File that Contains Anime ID
+df = getTopAnimes(start = 0, end = 1000, save_df = True)
+id_list = list(df['IDx'])
+title_list = list(df['Title'])
+
+## Deleting df to save memory.
+del df
+'''
+
+# Seasonal Animes
+
+## Read the File that Contains Anime ID
+df = pd.read_csv('AnimeList.csv')#getSeasonalAnimes()
+id_list = list(df['IDx'])
+title_list = list(df['Title'])
+## Deleting df to save memory.
+del df
 
 # Base Url for fetching information.
 BaseURL = "http://api.jikan.moe/anime/{}"
@@ -16,20 +42,16 @@ BaseURL = "http://api.jikan.moe/anime/{}"
 # ID, Title English, Synopsis, Episodes, Premiered, Genre, Rating, Score, Scored_By, Rank, Popularity, Members, Favorites, Image_URL
 anime_content = list()
 
-# Read the File that Contains Anime ID
-df = getTopAnime(start = 0, end = 1000, save_df = True)
-id_list = list(df['IDs'])
-
-# Deleting df to save memory.
-del df
+# failed anime IDs
+anime_failed = list()
 
 # for each anime ID in the list. do
-for ID in id_list:
+for idx, title in zip(id_list, title_list):
 	try:
-		print (f"[-] Fetching Anime with ID {ID}...")
+		print (f"[-] Fetching Anime: ID {idx} - Title: {title}...")
 
 		# Request for Anime Information with id = ID
-		raw_content = requests.get(BaseURL.format(ID))
+		raw_content = requests.get(BaseURL.format(idx))
 
 		# Checking whether response to the request is success or not
 		if raw_content.status_code == 429:
@@ -59,7 +81,7 @@ for ID in id_list:
 				genres = ", ".join([g['name'] for g in anime_json_data['genre']])
 
 				# Tuple of Anime Information
-				anime = (ID, anime_json_data['title'], str(anime_json_data['synopsis']),
+				anime = (idx, anime_json_data['title'], str(anime_json_data['synopsis']),
 					anime_json_data['episodes'], anime_json_data['premiered'], genres, anime_json_data['rating'],
 					anime_json_data['score'], anime_json_data['scored_by'], anime_json_data['rank'],
 					anime_json_data['popularity'], anime_json_data['members'], anime_json_data['favorites'],
@@ -71,23 +93,27 @@ for ID in id_list:
 				# Anime Information Successfull ADDED.
 				print ("[X] Success\n")
 
+				# sleep for 1 sec
+				time.sleep(0.5)
+
 			else:
 				# Display the Error Message
 				print (f"[!] {anime_json_data['error']}")
+				anime_failed.append((idx, title))
 		else:
 			print ("[!] Failed. Error Occured while Fetching Data\n")
+			anime_failed.append((idx, title))
 
 	except Exception as e:
 		# Catch all the errors that can occur during the process
 		# Display the Error and Continue the Process for next ID.
-		print (f"[!] Processing Failed for ID: {ID}\n")
+		print (f"[!] Processing Failed for ID: {idx}\n")
 		print (f"[!!] ERROR: {e}\n\n")
+		anime_failed.append((idx, title))
 		continue
 
+anime_cols = ["Anime_ID", "Title", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"]
+failed_cols = ["IDx", "Title"]
 
-# Create a Pandas DataFrame for the anime information collected
-df = pd.DataFrame(anime_content,
-	columns = ["ID", "Title", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"])
-
-# Save the DataFrame as an CSV File.
-df.to_csv('Anime.csv', index = False)
+save_df(values = anime_content, cols = anime_cols, filename = "anime.csv")
+save_df(values = anime_failed, cols = failed_cols, filename = "failed_idx.csv")
