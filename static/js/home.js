@@ -104,28 +104,6 @@ ns.view = (function() {
                 document.getElementById('lol').scrollIntoView();
             }
         },
-        build_error: function() {
-            document.getElementById("anime_content").style.display = "block";
-            let rows = '';
-            // clear the table
-            $('.row').empty();
-
-            rows = `
-                    <div class="text-wrapper" style = "text-align: center;">
-                        <div class="title" data-content="404">404</div>
-                        <div class="subtitle">
-                           Oops, the Anime you're looking for doesn't yet exists in the database.
-                        </div>
-                        <div class="buttons">
-                            <a class="button" href="/available_animes">Go to Available Animes.</a>
-                        </div>
-                    </div>
-                  `
-
-           $('.row').append(rows);
-
-           document.getElementById('lol').scrollIntoView();
-        },
         error: function(error_msg) {
             $('.error')
                 .text(error_msg)
@@ -255,9 +233,6 @@ ns.controller = (function(m, v) {
     });
 
     $event_pump.on('model_error', function(e, xhr, textStatus, errorThrown) {
-        //let error_msg = textStatus + ': ' + errorThrown + ' - ' + xhr.responseJSON.detail;
-        //view.error(error_msg);
-        view.build_error();
-        console.log("isugdfugsdjfgsgdfkgsdjfgsdgfjg");
+        window.open("/404", "_self");
     })
 }(ns.model, ns.view));
