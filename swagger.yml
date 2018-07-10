@@ -40,6 +40,8 @@ paths:
                   type: string
                 img_url:
                   type: string
+        404:
+          description: Anime Not Found
 
     post:
       operationId: Anime.createRatings
