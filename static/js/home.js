@@ -80,7 +80,9 @@ ns.view = (function() {
                     rows += `
                             <div class="col-md-4">
                                 <div class="card mb-4 box-shadow">
-                                    <img class="card-img-top" src="${anime_list[i].img_url}" alt="Card image cap">
+                                    <div class = "card-head">
+                                        <img class="card-img-top" src="${anime_list[i].img_url}" alt="anime_image"/>
+                                    </div>
                                     <div class="card-body">
                                         <p class="card-text" id = "recomm_name-${i}" style = "text-align:center">${anime_list[i].name}</p>
                                         <p class="card-text"><b>Synopsis: </b>${anime_list[i].synopsis}</p>
@@ -98,9 +100,31 @@ ns.view = (function() {
                 }
                 //$('table > tbody').append(rows);
                 $('.row').append(rows);
-
+                document.getElementsByClassName('row')[0].style.display = "block";
                 document.getElementById('lol').scrollIntoView();
             }
+        },
+        build_error: function() {
+            document.getElementById("anime_content").style.display = "block";
+            let rows = '';
+            // clear the table
+            $('.row').empty();
+
+            rows = `
+                    <div class="text-wrapper" style = "text-align: center;">
+                        <div class="title" data-content="404">404</div>
+                        <div class="subtitle">
+                           Oops, the Anime you're looking for doesn't yet exists in the database.
+                        </div>
+                        <div class="buttons">
+                            <a class="button" href="/available_animes">Go to Available Animes.</a>
+                        </div>
+                    </div>
+                  `
+
+           $('.row').append(rows);
+
+           document.getElementById('lol').scrollIntoView();
         },
         error: function(error_msg) {
             $('.error')
@@ -231,8 +255,9 @@ ns.controller = (function(m, v) {
     });
 
     $event_pump.on('model_error', function(e, xhr, textStatus, errorThrown) {
-        let error_msg = textStatus + ': ' + errorThrown + ' - ' + xhr.responseJSON.detail;
-        view.error(error_msg);
-        console.log(error_msg);
+        //let error_msg = textStatus + ': ' + errorThrown + ' - ' + xhr.responseJSON.detail;
+        //view.error(error_msg);
+        view.build_error();
+        console.log("isugdfugsdjfgsgdfkgsdjfgsdgfjg");
     })
 }(ns.model, ns.view));
