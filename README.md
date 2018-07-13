@@ -1,7 +1,7 @@
 # Anime-Recommender-System
 Recommendation System for Anime based on Genre, Synopsis and Ratings.
 
-## Instalation
+## Installation
 
 ```shell
  git clone https://github.com/Yashs744/Anime-Recommender-System.git
