@@ -1,5 +1,6 @@
 # Anime-Recommender-System
-Recommendation System for Anime based on Genre, Synopsis and Ratings.
+`Anime-Recommender-System` is my side project to enhance my knowledge in <i>Machine Learning, Python, Flask</i> and <i>Web Development</i>. <br>
+It is a Recommender System to recommend similar animes to users using genre, synopsis, and ratings.
 
 ## Installation
 
