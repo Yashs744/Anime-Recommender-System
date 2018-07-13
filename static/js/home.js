@@ -62,14 +62,15 @@ ns.view = (function() {
         update_editor: function(name) {
             $anime_name.val(name).focus();
         },
-        build_table: function(recommended_anime) {
+        build_sections: function(recommended_anime) {
             let rows = '';
             let anime_list = [];
+            let alter = 0;
 
-            document.getElementById("anime_content").style.display = "block";
+            //document.getElementById("anime_content").style.display = "block";
 
             // clear the table
-            $('.row').empty();
+            $('.rows').empty();
 
             // get the output
             anime_list = recommended_anime['output']['animes']
@@ -77,31 +78,68 @@ ns.view = (function() {
             // did we get a people array?
             if (anime_list) {
                 for (let i=0, l=anime_list.length; i < l; i++) {
-                    rows += `
-                            <div class="col-md-4">
-                                <div class="card mb-4 box-shadow">
-                                    <div class = "card-head">
-                                        <img class="card-img-top" src="${anime_list[i].img_url}" alt="anime_image"/>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="card-text" id = "recomm_name-${i}" style = "text-align:center">${anime_list[i].name}</p>
-                                        <p class="card-text"><b>Synopsis: </b>${anime_list[i].synopsis}</p>
-                                        <p class="card-text"><b>Genre: </b>${anime_list[i].genre}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group like-center-me">
-                                                <button type="button" class="btn btn-sm btn-outline-primary" value = "@model" id = "like-btn">Similar</button>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary" value = "@model" id = "dislike-btn">!Similar</button>
+                    let genres = '';
+
+                    let g = anime_list[i].genre.split(',');
+
+                    for (let j = 0, gl = g.length; j < gl; j++) {
+                        genres += `<span class = "genre">${g[j]}</span>`
+                    }
+
+                    if (alter == 0) {
+                        rows += `
+                                <!-- Section -->
+                                    <section class="wrapper style1">
+                                        <div class="inner">
+                                            <!-- 2 Columns -->
+                                                <div class="flex flex-2">
+                                                    <div class="col col1">
+                                                        <div class="image fit">
+                                                            <img src="${anime_list[i].img_url}" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col col2">
+                                                        <h3>${anime_list[i].name}</h3>
+                                                        <p class = "synopsis">${anime_list[i].synopsis}</p>
+                                                        <p class = "genres">
+                                                            ${genres}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </section>
+                                `
+                        alter = 1;
+                    }
+                    else {
+                        rows += `
+                                <!-- Section -->
+                                    <section class="wrapper style2">
+                                        <div class="inner">
+                                            <div class="flex flex-2">
+                                                <div class="col col2">
+                                                        <h3>${anime_list[i].name}</h3>
+                                                        <p class = "synopsis">${anime_list[i].synopsis}</p>
+                                                        <p class = "genres">
+                                                            ${genres}
+                                                        </p>
+                                                </div>
+                                                <div class="col col1 first">
+                                                    <div class="image fit">
+                                                        <img src="${anime_list[i].img_url}" alt="" />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            `
+                                    </section>
+                                `
+                        alter = 0;
+                    }
+
                 }
-                //$('table > tbody').append(rows);
-                $('.row').append(rows);
-                document.getElementsByClassName('row')[0].style.display = "block";
-                document.getElementById('lol').scrollIntoView();
+                $('.rows').append(rows);
+                //document.getElementsByClassName('row')[0].style.display = "block";
+                document.getElementById('main').scrollIntoView();
             }
         },
         error: function(error_msg) {
@@ -225,7 +263,7 @@ ns.controller = (function(m, v) {
 
     // Handle the model events
     $event_pump.on('model_read_success', function(e, data) {
-        view.build_table(data);
+        view.build_sections(data);
         view.events_(like_rating, dislike_rating);
     });
     $event_pump.on('model_add_success', function(e, data) {
