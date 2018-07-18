@@ -190,6 +190,18 @@ class AnimeRecommendation:
         # Returning the Top Anime Names.
         return self.dataframe['Anime_ID'].iloc[anime_ids].values
 
+    def getAnime_byGenre(self, genre):
+        '''
+            GET Top 20 animes that belong to a certain Genre.
+
+            Parameters:
+                genre: Value of the Genre to get animes.
+
+            :return:
+                Array of Anime IDs.
+        '''
+        return self.dataframe[['Anime_ID', 'Genre', 'Score']][self.dataframe.Genre.str.lower().str.contains(genre)].sort_values(by = ['Score'], ascending = False)['Anime_ID'].values[:20]
+
     def build_AnimeDict(self, anime_id):
         '''
             Create a Ordered Dictionary of Anime Name, Synopsis andd Genres.

@@ -24,6 +24,21 @@ ns.model = (function() {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
             })
         },
+        'read_genre': function(genre) {
+            let ajax_options = {
+                type: 'GET',
+                url: '/api/anime/' + genre,
+                accepts: 'application/json',
+                dataType: 'json'
+            };
+            $.ajax(ajax_options)
+            .done(function(data) {
+                $event_pump.trigger('model_read_success', [data]);
+            })
+            .fail(function(xhr, textStatus, errorThrown) {
+                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
+            })
+        },
         'post': function(main_name, recomm_name, rating) {
             let ajax_options = {
                 type: 'POST',
@@ -66,8 +81,6 @@ ns.view = (function() {
             let rows = '';
             let anime_list = [];
             let alter = 0;
-
-            //document.getElementById("anime_content").style.display = "block";
 
             // clear the table
             $('.rows').empty();
@@ -138,8 +151,17 @@ ns.view = (function() {
 
                 }
                 $('.rows').append(rows);
-                //document.getElementsByClassName('row')[0].style.display = "block";
                 document.getElementById('main').scrollIntoView();
+            }
+        },
+        events_: function(func) {
+            console.log("See I'm inside events");
+            var g = document.querySelectorAll("span.genre");
+
+            for (var i = 0; i < g.length; i++) {
+                var g_ = g[i];
+
+                g_.onclick = func;
             }
         },
         error: function(error_msg) {
@@ -149,7 +171,8 @@ ns.view = (function() {
             setTimeout(function() {
                 $('.error').css('visibility', 'hidden');
             }, 3000)
-        },
+        }
+        /*
         events_: function(func_1, func_2) {
             var like_btns = document.querySelectorAll('#like-btn')
             for (var i = 0; i < like_btns.length; i++) {
@@ -166,6 +189,7 @@ ns.view = (function() {
         response_: function() {
 
         }
+        */
     };
 }());
 
@@ -178,12 +202,21 @@ ns.controller = (function(m, v) {
         $event_pump = $('body'),
         $anime_name = $('#AnimeName');
 
-    /*
+    function genre_anime() {
+        let genre_value = $(this)[0].innerHTML;
+
+        if (validate(genre_value)) {
+            model.read_genre(genre_value);
+        } else {
+            alert('Problem with input data');
+        }
+    }
+
     // Get the data from the model after the controller is done initializing
     setTimeout(function() {
-        model.read();
-    }, 100)
-    */
+        view.events_(genre_anime);
+    }, 100);
+
 
     // Validate input
     function validate(name) {
@@ -216,7 +249,6 @@ ns.controller = (function(m, v) {
 
         if (validate_rating(anime_name, recomm_name, rating)) {
             model.post(anime_name, recomm_name, rating)
-            //console.log(anime_name + recomm_name + rating);
         } else {
             alert('Problem with input data');
         }
@@ -237,15 +269,6 @@ ns.controller = (function(m, v) {
         }
     };
 
-    /*
-    function sample() {
-        var name = $(this).parent().parent().parent()[0].childNodes[1].innerHTML;
-        name = name.substring(13);
-
-        console.log(name);
-    }
-    */
-
     $('#reset').click(function() {
         view.reset();
     });
@@ -264,10 +287,9 @@ ns.controller = (function(m, v) {
     // Handle the model events
     $event_pump.on('model_read_success', function(e, data) {
         view.build_sections(data);
-        view.events_(like_rating, dislike_rating);
+        view.events_(genre_anime);
     });
     $event_pump.on('model_add_success', function(e, data) {
-        //console.log(data + " added to the rating dataframe.");
     });
 
     $event_pump.on('model_error', function(e, xhr, textStatus, errorThrown) {

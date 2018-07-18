@@ -58,7 +58,32 @@ def returnRecommended(anime_name):
 
 		return recommended_animes
 	except Exception as e:
-		return make_response(jsonify({'Success': False, 'Message': str(e)}), 404)
+		return make_response(jsonify({'Success': False}), 404)
+
+def readGenre(genre):
+	'''
+		Parameters:
+			genre: One of the Genres.
+
+		:return:
+			JSON Formatted reponse with animes.
+	'''
+	animes_by_genre = OrderedDict([
+		('output', OrderedDict([
+			('animes', list())
+		]))
+	])
+	genre = genre.lower()
+
+	try:
+		anime_idxs = anime.getAnime_byGenre(genre)
+
+		for idx in anime_idxs:
+			animes_by_genre['output']['animes'].append(anime.build_AnimeDict(idx))
+
+		return animes_by_genre
+	except Exception as e:
+		return make_response(jsonify({'Success': False}), 404)
 
 def createRatings(anime_ratings):
 	'''
@@ -82,8 +107,8 @@ def createRatings(anime_ratings):
 
 	try:
 		# Get the ID
-		idx_1 = anime.getID(main_anime.lower())
-		idx_2 = anime.getID(recomm_anime.lower())
+		idx_1 = anime.getID(main_anime.lower())[0]
+		idx_2 = anime.getID(recomm_anime.lower())[0]
 
 		counts = ratings.addRating(rating_data = (idx_1, idx_2, rating))
 
@@ -93,4 +118,4 @@ def createRatings(anime_ratings):
 
 		return 201
 	except Exception as e:
-		return make_response(jsonify({'Success': False, 'Message': str(e)}), 400)
+		return make_response(jsonify({'Success': False}), 400)

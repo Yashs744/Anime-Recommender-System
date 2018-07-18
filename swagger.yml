@@ -69,3 +69,32 @@ paths:
       responses:
         201:
           description: Successfully Added Rating.
+
+  /anime/{genre}:
+    get:
+      operationId: Anime.readGenre
+      tags:
+        - anime
+      summary: Animes grouped by Genre
+      description: GET all the anime tht belong to the given Genre.
+      parameters:
+        - name: genre
+          in: path
+          description: Genre to get the list of animes.
+          type: string
+          required: True
+      responses:
+        200:
+          description: SUCCESS.
+          schema:
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
+                synopsis:
+                  type: string
+                genre:
+                  type: string
+                img_url:
+                  type: string
