@@ -9,6 +9,21 @@ ns.model = (function() {
 
     // Return the API
     return {
+        'home_page': function(name) {
+            let ajax_options = {
+                type: 'GET',
+                url: 'api/anime_homepage',
+                accepts: 'application/json',
+                dataType: 'json'
+            };
+            $.ajax(ajax_options)
+            .done(function(data) {
+                $event_pump.trigger('model_home_success', [data]);
+            })
+            .fail(function(xhr, textStatus, errorThrown) {
+                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
+            })
+        },
         'read': function(name) {
             let ajax_options = {
                 type: 'GET',
@@ -77,7 +92,7 @@ ns.view = (function() {
         update_editor: function(name) {
             $anime_name.val(name).focus();
         },
-        build_sections: function(recommended_anime) {
+        build_sections: function(recommended_anime, homepage = false) {
             let rows = '';
             let anime_list = [];
             let alter = 0;
@@ -86,7 +101,10 @@ ns.view = (function() {
             $('.rows').empty();
 
             // get the output
-            anime_list = recommended_anime['output']['animes']
+            if (homepage)
+                anime_list = recommended_anime['animes'];
+            else
+                anime_list = recommended_anime['output']['animes'];
 
             // did we get a people array?
             if (anime_list) {
@@ -151,11 +169,12 @@ ns.view = (function() {
 
                 }
                 $('.rows').append(rows);
-                document.getElementById('main').scrollIntoView();
+
+                if (!homepage)
+                    document.getElementById('main').scrollIntoView();
             }
         },
         events_: function(func) {
-            console.log("See I'm inside events");
             var g = document.querySelectorAll("span.genre");
 
             for (var i = 0; i < g.length; i++) {
@@ -214,7 +233,7 @@ ns.controller = (function(m, v) {
 
     // Get the data from the model after the controller is done initializing
     setTimeout(function() {
-        view.events_(genre_anime);
+        model.home_page()
     }, 100);
 
 
@@ -262,8 +281,7 @@ ns.controller = (function(m, v) {
         recomm_name = recomm_name.substring(13);
 
         if (validate_rating(anime_name, recomm_name, rating)) {
-            model.post(anime_name, recomm_name, rating)
-            //console.log(anime_name + recomm_name + rating);
+            model.post(anime_name, recomm_name, rating);
         } else {
             alert('Problem with input data');
         }
@@ -289,7 +307,9 @@ ns.controller = (function(m, v) {
         view.build_sections(data);
         view.events_(genre_anime);
     });
-    $event_pump.on('model_add_success', function(e, data) {
+    $event_pump.on('model_home_success', function(e, data) {
+        view.build_sections(data, true);
+        view.events_(genre_anime);
     });
 
     $event_pump.on('model_error', function(e, xhr, textStatus, errorThrown) {

@@ -22,6 +22,25 @@ simMatrix = anime.getSimilartiyMatrix()
 # Create a Ratings
 ratings = Ratings()
 
+def homePage():
+	'''
+		:return:
+
+	'''
+
+	homepage_animes = OrderedDict([('animes', list())])
+
+	try:
+		anime_idxs = anime.getAnimeSample()
+
+		for idx in anime_idxs:
+			homepage_animes['animes'].append(anime.build_AnimeDict(idx))
+
+		return homepage_animes
+	except Exception as e:
+		return make_response(jsonify({'Success': False}), 404)
+
+
 def returnRecommended(anime_name):
 	'''
 		Parameters:

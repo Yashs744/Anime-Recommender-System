@@ -200,7 +200,13 @@ class AnimeRecommendation:
             :return:
                 Array of Anime IDs.
         '''
-        return self.dataframe[['Anime_ID', 'Genre', 'Score']][self.dataframe.Genre.str.lower().str.contains(genre)].sort_values(by = ['Score'], ascending = False)['Anime_ID'].values[:20]
+        return self.dataframe[['Anime_ID', 'Genre']][self.dataframe.Genre.str.lower().str.contains(genre)]['Anime_ID'].sample(10).values
+
+    def getAnimeSample(self):
+        '''
+        '''
+
+        return self.dataframe['Anime_ID'].sample(12).values
 
     def build_AnimeDict(self, anime_id):
         '''

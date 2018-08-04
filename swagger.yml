@@ -12,6 +12,29 @@ basePath: /api
 
 # Paths supported by the server application
 paths:
+  /anime_homepage:
+    get:
+      operationId: Anime.homePage
+      tags:
+        - Anime
+      summary: List of Random Animes
+      description: List of Random Animes from the Dataset to Display on HomePage
+      responses:
+        200:
+          description: SUCCESS.
+          schema:
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
+                synopsis:
+                  type: string
+                genre:
+                  type: string
+                img_url:
+                  type: string
+
   /anime:
     get:
       operationId: Anime.returnRecommended
@@ -74,7 +97,7 @@ paths:
     get:
       operationId: Anime.readGenre
       tags:
-        - anime
+        - Anime
       summary: Animes grouped by Genre
       description: GET all the anime tht belong to the given Genre.
       parameters:
