@@ -21,9 +21,4 @@ Go to http://127.0.0.1:8000 to get a live preview of the website.
 
 ---
 
-## Demo
 
-
-Beta Version of the Website is available at [PythonAnywhere](http://animerecommendation.pythonanywhere.com/).
-
----
