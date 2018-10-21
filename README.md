@@ -12,7 +12,7 @@ It is a Recommender System to recommend similar animes to users using genre, syn
 
 Inside `Anime-Recommender-System` directory.
 ```shell
-pip3 install -r requirements.txt
+pip3 install -r Requirements.txt
 
 python3 server.py
 ```
