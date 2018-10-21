@@ -1,5 +1,0 @@
-connexion
-flask
-scikit-learn
-pandas
-numpy
