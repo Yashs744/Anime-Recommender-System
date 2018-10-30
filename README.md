@@ -21,4 +21,8 @@ Go to http://127.0.0.1:8000 to get a live preview of the website.
 
 ---
 
+## Screenshots
+![Main Screen](./screenshots/Main1.PNG)
+![Main Screen2](./screenshots/Main2.PNG)
+![Main Screen3](./screenshots/Main3.PNG)
 
