@@ -3,10 +3,12 @@ import pandas as pd
 from collections import OrderedDict
 from Recommendation import AnimeRecommendation
 from flask import make_response, jsonify
-from model import Ratings
+import sqlite3 as sql
 
+# Create a Connection to the Database
+conn = sql.connect("data/dataset.db")
 # Load the Dataset
-dataframe = pd.read_csv('data/cleaned_anime_data.csv')
+dataframe = pd.read_sql_query("SELECT * FROM Animes;", con = conn)
 dataframe = dataframe.reset_index()
 dataframe = dataframe.drop('index', axis = 1)
 
@@ -20,7 +22,7 @@ indices = anime.getMapping()
 simMatrix = anime.getSimilartiyMatrix()
 
 # Create a Ratings
-ratings = Ratings()
+#ratings = Ratings()
 
 def homePage():
 	'''
@@ -31,9 +33,10 @@ def homePage():
 	homepage_animes = OrderedDict([('animes', list())])
 
 	try:
-		anime_idxs = anime.getAnimeSample()
+		conn = sql.connect("data/dataset.db")
+		anime_idxs = pd.read_sql_query("SELECT Anime_ID FROM Views ORDER BY vCount DESC LIMIT 10;", con = conn)
 
-		for idx in anime_idxs:
+		for idx in anime_idxs['Anime_ID']:
 			homepage_animes['animes'].append(anime.build_AnimeDict(idx))
 
 		return homepage_animes
@@ -104,37 +107,28 @@ def readGenre(genre):
 	except Exception as e:
 		return make_response(jsonify({'Success': False}), 404)
 
-def createRatings(anime_ratings):
+def addCount(anime_name):
 	'''
-		Create Ratings for the given Anime and recommended Anime.
-			- 1: Both are Similar
-			- 0: Not Similar
+		Create a View Count of the Anime Searched.
 
 		Parameters:
-			anime_ratings: JSON Formatted Data with
-							- Name of the given Anime
-							- Name of the recommended Anime
-							- Rating (1 or 0).
+			anime_name: JSON Formatted Data with Name of the searched Anime.
 
 		:return:
-			201 Succes or 400 Error
+			201 Succes
 	'''
-
-	main_anime = anime_ratings.get('main_anime_name', None)
-	recomm_anime = anime_ratings.get('recomm_anime_name', None)
-	rating = anime_ratings.get('rating', None)
-
 	try:
 		# Get the ID
-		idx_1 = anime.getID(main_anime.lower())[0]
-		idx_2 = anime.getID(recomm_anime.lower())[0]
+		idx = anime.getID(anime_name.get("anime_name", None).lower())[0]
 
-		counts = ratings.addRating(rating_data = (idx_1, idx_2, rating))
+		conn = sql.connect("data/dataset.db")
 
-		if counts == 10:
-			ratings.saveRating()
-			ratings.__reset__()
+		cur = conn.cursor()
+		cur.execute(f"UPDATE Views SET vCount = vCount + 1 WHERE Anime_ID = {idx}")
+
+		conn.commit()
 
 		return 201
 	except Exception as e:
-		return make_response(jsonify({'Success': False}), 400)
+		with open("log.txt", "a") as log:
+			log.write(str(e))
