@@ -50,7 +50,7 @@ def getTopAnimes(start = 0, end = 1000, save_df = True):
 				except Exception as e:
 					print (f"Error at {i+1}th Anime of {j}th List\n")
 
-				anime_list.append((id, title, link))
+				anime_list.append((idx, title, link))
 		else:
 			print(f"Couldnot load list {i}\n")
 
