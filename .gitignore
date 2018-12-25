@@ -1,3 +1,5 @@
 *.txt
 *.pyc
 anime.csv
+*.db
+*.db.sqbpro

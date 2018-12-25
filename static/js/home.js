@@ -24,6 +24,25 @@ ns.model = (function() {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
             })
         },
+        'viewCount': function(name) {
+            let ajax_options = {
+                type: 'POST',
+                url: '/api/anime_homepage',
+                accepts: 'application/json',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    'anime_name': name
+                })
+            };
+            $.ajax(ajax_options)
+            .done(function(data) {
+                $event_pump.trigger('model_home_success', [data]);
+            })
+            .fail(function(xhr, textStatus, errorThrown) {
+                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
+            })
+        },
         'read': function(name) {
             let ajax_options = {
                 type: 'GET',
@@ -49,27 +68,6 @@ ns.model = (function() {
             $.ajax(ajax_options)
             .done(function(data) {
                 $event_pump.trigger('model_read_success', [data]);
-            })
-            .fail(function(xhr, textStatus, errorThrown) {
-                $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
-            })
-        },
-        'post': function(main_name, recomm_name, rating) {
-            let ajax_options = {
-                type: 'POST',
-                url: '/api/anime',
-                accepts: 'application/json',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({
-                    'main_anime_name': main_name,
-                    'recomm_anime_name': recomm_name,
-                    'rating': rating
-                })
-            };
-            $.ajax(ajax_options)
-            .done(function(data) {
-                $event_pump.trigger('model_add_success', [data]);
             })
             .fail(function(xhr, textStatus, errorThrown) {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
@@ -191,24 +189,6 @@ ns.view = (function() {
                 $('.error').css('visibility', 'hidden');
             }, 3000)
         }
-        /*
-        events_: function(func_1, func_2) {
-            var like_btns = document.querySelectorAll('#like-btn')
-            for (var i = 0; i < like_btns.length; i++) {
-                var lbtn_ = like_btns[i];
-                lbtn_.onclick = func_1;
-            }
-
-            var dislike_btns = document.querySelectorAll('#dislike-btn')
-            for (var i = 0; i < dislike_btns.length; i++) {
-                var dlbtn_ = dislike_btns[i];
-                dlbtn_.onclick = func_2;
-            }
-        },
-        response_: function() {
-
-        }
-        */
     };
 }());
 
@@ -233,17 +213,13 @@ ns.controller = (function(m, v) {
 
     // Get the data from the model after the controller is done initializing
     setTimeout(function() {
-        model.home_page()
+        model.home_page();
     }, 100);
 
 
     // Validate input
     function validate(name) {
         return name !== "";
-    }
-
-    function validate_rating(name_1, name_2, rating) {
-        return name_1 !== "" && name_2 !== "" && rating !== "";
     }
 
     // Create our event handlers
@@ -253,39 +229,12 @@ ns.controller = (function(m, v) {
         e.preventDefault();
 
         if (validate(anime_name)) {
-            model.read(anime_name)
+            model.read(anime_name);
+            model.viewCount(anime_name);
         } else {
             alert('Problem with input data');
         }
     });
-
-    function like_rating() {
-        let anime_name = $anime_name.val(),
-            recomm_name = $(this).parent().parent().parent()[0].childNodes[1].innerHTML,
-            rating = 1;
-
-        recomm_name = recomm_name.substring(13);
-
-        if (validate_rating(anime_name, recomm_name, rating)) {
-            model.post(anime_name, recomm_name, rating)
-        } else {
-            alert('Problem with input data');
-        }
-    };
-
-    function dislike_rating() {
-        let anime_name = $anime_name.val(),
-            recomm_name = $(this).parent().parent().parent()[0].childNodes[1].innerHTML,
-            rating = 0;
-
-        recomm_name = recomm_name.substring(13);
-
-        if (validate_rating(anime_name, recomm_name, rating)) {
-            model.post(anime_name, recomm_name, rating);
-        } else {
-            alert('Problem with input data');
-        }
-    };
 
     $('#reset').click(function() {
         view.reset();

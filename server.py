@@ -2,6 +2,7 @@
 from flask import render_template
 import connexion
 import pandas as pd
+import sqlite3 as sql
 
 # Application Interface
 app = connexion.App(__name__, specification_dir = './')
@@ -9,8 +10,10 @@ app = connexion.App(__name__, specification_dir = './')
 # Read the 'swagger.yml' configuration file.
 app.add_api('swagger.yml')
 
-# Read the Dataset
-df = pd.read_csv('data/cleaned_anime_data.csv', usecols = ['Anime_ID', 'Title'])
+#Create a Connection to the Database
+conn = sql.connect("data/dataset.db")
+# Load the Dataset
+df = pd.read_sql_query("SELECT Anime_ID, Title FROM Animes;", con = conn)
 count = df.shape[0]
 
 # URL Route to the Application at '/' i.e root
