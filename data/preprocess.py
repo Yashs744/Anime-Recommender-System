@@ -53,6 +53,7 @@ def processTitle(X):
     # return the Cleaned Version
     return cleaned
 
+"""
 # open the csv file
 anime = pd.read_csv('anime.csv')
 
@@ -79,3 +80,4 @@ if os.path.isfile('cleaned_anime_data.csv'):
 # else save the new dataset
 else:
     anime.to_csv('cleaned_anime_data.csv', index = False)
+"""

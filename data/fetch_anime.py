@@ -14,15 +14,12 @@ import pandas as pd
 import time
 import re
 
-def save_toCSV(list_of_animes, cols = ['IDx', 'Title', 'Link'], to_disk = True):
+def create_DF(list_of_animes, cols = ['IDx', 'Title', 'Link']):
 	df = pd.DataFrame(list_of_animes, columns = cols)
-
-	if to_disk:
-		df.to_csv('AnimeList.csv', sep=",", index = False, encoding = "utf8")
 
 	return df
 
-def getTopAnimes(start = 0, end = 1000, save_df = True):
+def getTopAnimes(start = 0, end = 1000):
 	anime_list = list()
 
 	for i in range(start, end+1, 50):
@@ -56,9 +53,9 @@ def getTopAnimes(start = 0, end = 1000, save_df = True):
 
 		time.sleep(1.5)
 
-	return save_toCSV(list_of_animes = anime_list, to_disk = save_df)
+	return create_DF(list_of_animes = anime_list)
 
-def getSeasonalAnimes(season = "winter", year = 2016, save_df = True):
+def getSeasonalAnimes(season = "winter", year = 2016):
 	"""
 		Hierarchy in the HTML Code:
 			div.id = "content"
@@ -128,7 +125,7 @@ def getSeasonalAnimes(season = "winter", year = 2016, save_df = True):
 
 			seasonal_anime_list.extend(anime_list)
 
-	return save_toCSV(list_of_animes = seasonal_anime_list, to_disk = save_df)
+	return create_DF(list_of_animes = seasonal_anime_list)
 
 if __name__ == "__main__":
 	getTopAnimes()

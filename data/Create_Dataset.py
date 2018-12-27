@@ -6,16 +6,23 @@
 '''
 
 from fetch_anime import getTopAnimes, getSeasonalAnimes
+from preprocess import processSynopsis, processSynopsis_v2, processRatings, processTitle
+from sqlalchemy import create_engine
 import pandas as pd
 import requests
 import json
 import time
 
+
+
+#Create an in-memory SQLlite Database
+engine = create_engine('sqlite://', echo=False)
+
+'''
 def save_df(values, cols, filename):
 	# Create a Pandas DataFrame & save it to the disk in CSV Format
 	pd.DataFrame(values, columns = cols).to_csv(filename, index = False)
 
-'''
 # Top Animes
 
 ## Read the File that Contains Anime ID
@@ -30,9 +37,10 @@ del df
 # Seasonal Animes
 
 ## Read the File that Contains Anime ID
-df = pd.read_csv('AnimeList.csv')#getSeasonalAnimes()
+df = getTopAnimes()
 id_list = list(df['IDx'])
 title_list = list(df['Title'])
+
 ## Deleting df to save memory.
 del df
 
@@ -115,5 +123,22 @@ for idx, title in zip(id_list, title_list):
 anime_cols = ["Anime_ID", "Title", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"]
 failed_cols = ["IDx", "Title"]
 
+
+anime_df = pd.DataFrame(data = anime_content, cols = anime_cols)
+failed_df = pd.DataFrame(data = anime_failed, cols = failed_cols)
+
+# Apply Pre-Processing Steps
+anime_df['Title'] = anime.Title.apply(processTitle)
+anime_df['Synopsis'] = anime.Synopsis.apply(processSynopsis_v2)
+
+# New Columns 'c' stands for cleaned
+anime_df['cSynopsis'] = anime.Synopsis.apply(processSynopsis)
+anime_df['cGenre'] = anime.Genre.str.lower()
+anime_df['cRating'] = anime.Rating.apply(processRatings)
+
+anime_df.to_sql(name = Animes, con = engine, index = False, if_exist = 'append')
+
+"""
 save_df(values = anime_content, cols = anime_cols, filename = "anime.csv")
 save_df(values = anime_failed, cols = failed_cols, filename = "failed_idx.csv")
+"""
