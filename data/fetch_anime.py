@@ -14,7 +14,7 @@ import pandas as pd
 import time
 import re
 
-def create_DF(list_of_animes, cols = ['IDx', 'Title', 'Link']):
+def create_df(list_of_animes, cols = ['IDx', 'Title', 'Link']):
 	df = pd.DataFrame(list_of_animes, columns = cols)
 
 	return df
@@ -53,7 +53,7 @@ def getTopAnimes(start = 0, end = 1000):
 
 		time.sleep(1.5)
 
-	return create_DF(list_of_animes = anime_list)
+	return create_df(list_of_animes = anime_list)
 
 def getSeasonalAnimes(season = "winter", year = 2016):
 	"""
@@ -125,7 +125,4 @@ def getSeasonalAnimes(season = "winter", year = 2016):
 
 			seasonal_anime_list.extend(anime_list)
 
-	return create_DF(list_of_animes = seasonal_anime_list)
-
-if __name__ == "__main__":
-	getTopAnimes()
+	return create_df(list_of_animes = seasonal_anime_list)

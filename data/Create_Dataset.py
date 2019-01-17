@@ -5,39 +5,19 @@
 	Third Party Tool Used: Jikan (https://github.com/jikan-me/jikan) as an API Endpoint of MAL.
 '''
 
-from fetch_anime import getTopAnimes, getSeasonalAnimes
-from preprocess import processSynopsis, processSynopsis_v2, processRatings, processTitle
-from sqlalchemy import create_engine
 import pandas as pd
 import requests
 import json
 import time
 
+from fetch_anime import getTopAnimes, getSeasonalAnimes
+from preprocess import cleanSynopsis, cleanTitle, processSynopsis, processRatings
+import sqlite3 as sql
 
+# Top Anime / Seasonal Animes
 
-#Create an in-memory SQLlite Database
-engine = create_engine('sqlite://', echo=False)
-
-'''
-def save_df(values, cols, filename):
-	# Create a Pandas DataFrame & save it to the disk in CSV Format
-	pd.DataFrame(values, columns = cols).to_csv(filename, index = False)
-
-# Top Animes
-
-## Read the File that Contains Anime ID
-df = getTopAnimes(start = 0, end = 1000, save_df = True)
-id_list = list(df['IDx'])
-title_list = list(df['Title'])
-
-## Deleting df to save memory.
-del df
-'''
-
-# Seasonal Animes
-
-## Read the File that Contains Anime ID
-df = getTopAnimes()
+## Read the dataframe that contains Anime ID
+df = getSeasonalAnimes(season = "fall", year = 2017)
 id_list = list(df['IDx'])
 title_list = list(df['Title'])
 
@@ -101,7 +81,7 @@ for idx, title in zip(id_list, title_list):
 				# Anime Information Successfull ADDED.
 				print ("[X] Success\n")
 
-				# sleep for 1 sec
+				# sleep for 1/2 sec
 				time.sleep(0.5)
 
 			else:
@@ -123,22 +103,31 @@ for idx, title in zip(id_list, title_list):
 anime_cols = ["Anime_ID", "Title", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"]
 failed_cols = ["IDx", "Title"]
 
+anime_df = pd.DataFrame(anime_content, columns = anime_cols)
+failed_df = pd.DataFrame(anime_failed, columns = failed_cols)
 
-anime_df = pd.DataFrame(data = anime_content, cols = anime_cols)
-failed_df = pd.DataFrame(data = anime_failed, cols = failed_cols)
+# Apply Cleaning Steps
+anime_df['Title'] = anime_df.Title.apply(cleanTitle)
+anime_df['Synopsis'] = anime_df.Synopsis.apply(cleanSynopsis)
 
-# Apply Pre-Processing Steps
-anime_df['Title'] = anime.Title.apply(processTitle)
-anime_df['Synopsis'] = anime.Synopsis.apply(processSynopsis_v2)
+# New Columns 'c' stands for cleaned & preprocessed
+anime_df['cSynopsis'] = anime_df.Synopsis.apply(processSynopsis)
+anime_df['cGenre'] = anime_df.Genre.str.lower()
+anime_df['cRating'] = anime_df.Rating.apply(processRatings)
 
-# New Columns 'c' stands for cleaned
-anime_df['cSynopsis'] = anime.Synopsis.apply(processSynopsis)
-anime_df['cGenre'] = anime.Genre.str.lower()
-anime_df['cRating'] = anime.Rating.apply(processRatings)
+#Create an in-memory SQLlite Database
+conn = sql.connect('dataset.db')
 
-anime_df.to_sql(name = Animes, con = engine, index = False, if_exist = 'append')
+# save to the database
+try:
+	anime_df.to_sql(name = 'Animes', con = conn, index = False, if_exists = 'append')
+except:
+	existing = pd.read_sql_query('SELECT Anime_ID FROM Animes', con = conn)
+	mask = ~anime_df.Anime_ID.isin(existing.Anime_ID)
 
-"""
-save_df(values = anime_content, cols = anime_cols, filename = "anime.csv")
-save_df(values = anime_failed, cols = failed_cols, filename = "failed_idx.csv")
-"""
+	try:
+		anime_df.loc[mask].to_sql(name = 'Animes', con = conn, index = False, if_exists = 'append')
+	except Exception as e:
+		print (f"[!] {e}")
+
+conn.close()
