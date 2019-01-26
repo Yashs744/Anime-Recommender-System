@@ -1,5 +1,6 @@
 import re
 
+
 def cleanSynopsis(synopsis):
     # Replace [Written by MAL Rewrite] wiht ``
     cleaned = synopsis.replace("[Written by MAL Rewrite]", "")
@@ -11,6 +12,7 @@ def cleanSynopsis(synopsis):
     # return the Cleaned Version
     return cleaned
 
+
 def cleanTitle(title):
     # Remove extra characters
     cleaned = re.sub(r'[&#039;]', '', title)
@@ -21,6 +23,7 @@ def cleanTitle(title):
 
     # return the Cleaned Version
     return cleaned
+
 
 def processSynopsis(synopsis):
     # Convert the Synopsis to all lower characters
@@ -38,6 +41,7 @@ def processSynopsis(synopsis):
 
     # return the Cleaned Version
     return cleaned
+
 
 def processRatings(rating):
     # Convert the Synopsis to all lower characters

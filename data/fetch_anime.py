@@ -14,18 +14,20 @@ import pandas as pd
 import time
 import re
 
-def create_df(list_of_animes, cols = ['IDx', 'Title', 'Link']):
-	df = pd.DataFrame(list_of_animes, columns = cols)
+
+def create_df(list_of_animes, cols=['IDx', 'Title', 'Link']):
+	df = pd.DataFrame(list_of_animes, columns=cols)
 
 	return df
 
-def getTopAnimes(start = 0, end = 1000):
+
+def getTopAnimes(start=0, end=1000):
 	anime_list = list()
 
 	for i in range(start, end+1, 50):
 		raw_content = requests.get(f"https://myanimelist.net/topanime.php?limit={i}")
 
-		if (raw_content.status_code == 200):
+		if raw_content.status_code == 200:
 			animes = BS(raw_content.text, 'lxml')
 
 			animes = animes.find('div', {'class': 'pb12'})
@@ -45,17 +47,18 @@ def getTopAnimes(start = 0, end = 1000):
 					idx = re.search(r'/anime/([0-9]+)', link).group(1)
 
 				except Exception as e:
-					print (f"Error at {i+1}th Anime of {j}th List\n")
+					print(f"Error at {i+1}th Anime of {j}th List\n")
 
 				anime_list.append((idx, title, link))
 		else:
-			print(f"Couldnot load list {i}\n")
+			print(f"Could not load list {i}\n")
 
 		time.sleep(1.5)
 
 	return create_df(list_of_animes = anime_list)
 
-def getSeasonalAnimes(season = "winter", year = 2016):
+
+def getSeasonalAnimes(season="winter", year=2016):
 	"""
 		Hierarchy in the HTML Code:
 			div.id = "content"
@@ -66,14 +69,14 @@ def getSeasonalAnimes(season = "winter", year = 2016):
 					- div.class: js-seasonal-anime-list-key-4
 					- div.class: js-seasonal-anime-list-key-5
 					{
-						6 div tags with keys 1, 2, 3, 4, 5
+						5 div tags with keys 1, 2, 3, 4, 5
 							key 1: TV
 							key 2: OVA
 							key 3: Movies
 							key 4: Special
 							key 5: ONA
 
-						TV can have multiple div for diplaying continuing
+						TV can have multiple div for displaying continuing
 					}
 					Inside each key div
 						- div.class: seasonal-anime (for each anime)
@@ -90,14 +93,14 @@ def getSeasonalAnimes(season = "winter", year = 2016):
 
 	# if response is not OK abort the process.
 	if r.status_code != 200:
-		print (f"Status Code: {r.status_code}")
+		print(f"Status Code: {r.status_code}")
 		abort(-1)
 
 	# Parse the reponse using BS and htmlparser
-	soup =  BS(r.text, 'html.parser')
+	soup = BS(r.text, 'html.parser')
 
 	# Select all seasonal animes available in that season
-	seasonal_animes = soup.find('div', id = "content").find('div', {'class': 'js-categories-seasonal'})
+	seasonal_animes = soup.find('div', id="content").find('div', {'class': 'js-categories-seasonal'})
 
 	# Selecting animes based on keys
 	tv = seasonal_animes.find_all('div', {'class': 'js-seasonal-anime-list-key-1'})
