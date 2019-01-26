@@ -8,9 +8,9 @@ import sqlite3 as sql
 # Create a Connection to the Database
 conn = sql.connect("data/dataset.db")
 # Load the Dataset
-dataframe = pd.read_sql_query("SELECT * FROM Animes;", con = conn)
+dataframe = pd.read_sql_query("SELECT * FROM Animes;", con=conn)
 dataframe = dataframe.reset_index()
-dataframe = dataframe.drop('index', axis = 1)
+dataframe = dataframe.drop('index', axis=1)
 
 # Initialize the Class
 anime = AnimeRecommendation(dataframe)
@@ -21,20 +21,19 @@ indices = anime.getMapping()
 # Get Similarity Matrix
 simMatrix = anime.getSimilartiyMatrix()
 
-# Create a Ratings
-#ratings = Ratings()
 
 def homePage():
-	'''
+	"""
 		:return:
+			JSON Formatted response of anime or 404 Error.
 
-	'''
+	"""
 
 	homepage_animes = OrderedDict([('animes', list())])
 
 	try:
 		conn = sql.connect("data/dataset.db")
-		anime_idxs = pd.read_sql_query("SELECT Anime_ID FROM Views ORDER BY vCount DESC LIMIT 10;", con = conn)
+		anime_idxs = pd.read_sql_query("SELECT Anime_ID FROM Views ORDER BY vCount DESC LIMIT 10;", con=conn)
 
 		for idx in anime_idxs['Anime_ID']:
 			homepage_animes['animes'].append(anime.build_AnimeDict(idx))
@@ -45,13 +44,13 @@ def homePage():
 
 
 def returnRecommended(anime_name):
-	'''
+	"""
 		Parameters:
 			anime_name: Name of the Anime to get Recommendation.
 
 		:return:
 			JSON Formatted response of recommended anime.
-	'''
+	"""
 
 	recommended_animes = OrderedDict()
 
@@ -61,7 +60,7 @@ def returnRecommended(anime_name):
 
 	anime_name = anime_name.lower()
 
-	anime_Idx = anime.getID(anime_name)#dataframe[dataframe.Title.str.lower().str.contains(anime_name)]['Anime_ID'].values
+	anime_Idx = anime.getID(anime_name)
 
 	try:
 		if len(anime_Idx) > 1:
@@ -82,14 +81,15 @@ def returnRecommended(anime_name):
 	except Exception as e:
 		return make_response(jsonify({'Success': False}), 404)
 
+
 def readGenre(genre):
-	'''
+	"""
 		Parameters:
 			genre: One of the Genres.
 
 		:return:
 			JSON Formatted reponse with animes.
-	'''
+	"""
 	animes_by_genre = OrderedDict([
 		('output', OrderedDict([
 			('animes', list())
@@ -107,8 +107,9 @@ def readGenre(genre):
 	except Exception as e:
 		return make_response(jsonify({'Success': False}), 404)
 
+
 def addCount(anime_name):
-	'''
+	"""
 		Create a View Count of the Anime Searched.
 
 		Parameters:
@@ -116,7 +117,7 @@ def addCount(anime_name):
 
 		:return:
 			201 Succes
-	'''
+	"""
 	try:
 		# Get the ID
 		idx = anime.getID(anime_name.get("anime_name", None).lower())[0]
