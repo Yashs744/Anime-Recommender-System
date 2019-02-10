@@ -1,0 +1,109 @@
+#banner {
+    display: -ms-flexbox;
+    -ms-flex-pack: center;
+    -ms-flex-align: center;
+    padding: 8em 0 6em 0;
+    -moz-align-items: center;
+    -webkit-align-items: center;
+    -ms-align-items: center;
+    align-items: center;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    -moz-justify-content: center;
+    -webkit-justify-content: center;
+    -ms-justify-content: center;
+    justify-content: center;
+    background-image: url("/static/images/404.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-top: 0;
+    min-height: 100vh;
+    height: 100vh !important;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+}
+
+#banner:before {
+	-moz-transition: opacity 3s ease;
+	-webkit-transition: opacity 3s ease;
+	-ms-transition: opacity 3s ease;
+	transition: opacity 3s ease;
+	-moz-transition-delay: 1s;
+	-webkit-transition-delay: 1s;
+	-ms-transition-delay: 1s;
+	transition-delay: 1s;
+	content: '';
+	background-color: #42424f;
+	display: block;
+	height: 100%;
+	left: 0;
+	opacity: 0.45;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+}
+
+    #banner .inner {
+        -moz-transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+        -ms-transform: scale(1.0);
+        transform: scale(1.0);
+        -moz-transition: opacity 1s ease, -moz-transform 1s ease;
+        -webkit-transition: opacity 1s ease, -webkit-transform 1s ease;
+        -ms-transition: opacity 1s ease, -ms-transform 1s ease;
+        transition: opacity 1s ease, transform 1s ease;
+        opacity: 1;
+        position: relative;
+        z-index: 2;
+		text-align: center;
+    }
+
+    .buttons {
+        margin: 30px;
+    }
+
+    #banner .buttons a {
+        font-weight: 700;
+        border: 2px solid #EE4B5E;
+        text-decoration: none;
+        padding: 15px;
+        text-transform: uppercase;
+        color: white;
+        border-radius: 26px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    a.button:hover {
+        background-color: #EE4B5E;
+        color: white;
+        transition: all 0.2s ease-in-out;
+    }
+
+.text-wrapper {
+    height: 100%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   opacity: 1;
+}
+
+.title {
+    font-size: 6em;
+    font-weight: 700;
+    color: #EE4B5E;
+
+    -webkit-text-size-adjust: 5em;
+}
+
+.subtitle {
+    font-size: 40px;
+    font-weight: 700;
+    color: #1FA9D6;
+    text-align: center;
+}

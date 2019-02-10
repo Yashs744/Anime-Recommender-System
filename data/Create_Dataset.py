@@ -1,22 +1,19 @@
-'''
-    Author: Yash Sharma
-	Date: 22th May, 2018
-	Third Party Tool Used: Jikan (https://github.com/jikan-me/jikan) as an API Endpoint of MAL.
-'''
-
-import pandas as pd
-import requests
+"""
+	Third Party Tool Used:
+		Jikan (https://github.com/jikan-me/jikan) as an API Endpoint of MAL.
+"""
 import json
+import requests
 import time
-
+import pandas as pd
+import sqlite3 as sql
 from fetch_anime import getTopAnimes, getSeasonalAnimes
 from preprocess import cleanSynopsis, cleanTitle, processSynopsis, processRatings
-import sqlite3 as sql
 
 # Top Anime / Seasonal Animes
 
 # Read the dataframe that contains Anime ID
-df = getSeasonalAnimes(season="fall", year=2017)
+df = getSeasonalAnimes(season="winter", year=2017)
 id_list = list(df['IDx'])
 title_list = list(df['Title'])
 
@@ -69,7 +66,7 @@ for idx, title in zip(id_list, title_list):
 				genres = ", ".join([g['name'] for g in anime_json_data['genre']])
 
 				# Tuple of Anime Information
-				anime = (idx, anime_json_data['title'], str(anime_json_data['synopsis']),
+				anime = (idx, anime_json_data['title'], anime_json_data['title_english'], str(anime_json_data['synopsis']),
 					anime_json_data['episodes'], anime_json_data['premiered'], genres, anime_json_data['rating'],
 					anime_json_data['score'], anime_json_data['scored_by'], anime_json_data['rank'],
 					anime_json_data['popularity'], anime_json_data['members'], anime_json_data['favorites'],
@@ -100,7 +97,7 @@ for idx, title in zip(id_list, title_list):
 		anime_failed.append((idx, title))
 		continue
 
-anime_cols = ["Anime_ID", "Title", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"]
+anime_cols = ["Anime_ID", "Title", "Title English", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"]
 failed_cols = ["IDx", "Title"]
 
 anime_df = pd.DataFrame(anime_content, columns=anime_cols)

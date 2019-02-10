@@ -1,24 +1,13 @@
-'''
-	Author: Yash Sharma
-	Date: 22th May, 2018
-
-	Third Party Libraries Used:
-		- requests to send request and get response
-		- BeautifulSoup to parse the HTML Content.
-		- pandas to create and manupilate dataframe.
-'''
-
-from bs4 import BeautifulSoup as BS
-import requests
-import pandas as pd
-import time
 import re
+import requests
+import time
+import pandas as pd
+from bs4 import BeautifulSoup as BS
 
 
-def create_df(list_of_animes, cols=['IDx', 'Title', 'Link']):
-	df = pd.DataFrame(list_of_animes, columns=cols)
-
-	return df
+def create_df(list_of_animes):
+	cols = ['IDx', 'Title', 'Link']
+	return pd.DataFrame(list_of_animes, columns=cols)
 
 
 def getTopAnimes(start=0, end=1000):
@@ -55,10 +44,10 @@ def getTopAnimes(start=0, end=1000):
 
 		time.sleep(1.5)
 
-	return create_df(list_of_animes = anime_list)
+	return create_df(list_of_animes=anime_list)
 
 
-def getSeasonalAnimes(season="winter", year=2016):
+def getSeasonalAnimes(season="winter", year=2017):
 	"""
 		Hierarchy in the HTML Code:
 			div.id = "content"
@@ -128,4 +117,4 @@ def getSeasonalAnimes(season="winter", year=2016):
 
 			seasonal_anime_list.extend(anime_list)
 
-	return create_df(list_of_animes = seasonal_anime_list)
+	return create_df(list_of_animes=seasonal_anime_list)
