@@ -20,17 +20,13 @@ class AnimeRecommendation:
     """
 
     def __init__(self, dataframe):
-        '''
-            __init__() method of the class AnimeRecommendation.
+        """
+        __init__() method of the class AnimeRecommendation.
+        Initialize TF-IDF & Count Vectorizer to be used for getting Similarity Matrix.
 
-            Initialize TF-IDF & Count Vectorizer to be used for getting Similarity Matrix.
-
-            Parameters:
-                dataframe: Complete Dataset (in pandas dataframe format) of Anime.
-
-            :return:
-                None
-        '''
+        :param dataframe: ``pandas dataframe object``
+            Complete Dataset (in pandas dataframe format) of Anime.
+        """
 
         self.dataframe = dataframe
 
@@ -41,17 +37,14 @@ class AnimeRecommendation:
 
     def getSimilartiyMatrix(self):
         """
-            GET Similarity Matrix for Anime Dataset based on Synopsis, Genre & Rating.
-            Similariity Matrix are obtained using TfidfVectorize on Synopsis & Genre and
-            CountVectorizer on Ratings followed by a linear_kernel().
+        GET Similarity Matrix for Anime Dataset based on Synopsis, Genre & Rating.
+        Similariity Matrix are obtained using TfidfVectorize on Synopsis & Genre and
+        CountVectorizer on Ratings followed by a linear_kernel().
 
-            Cleaned Version of Synopsis, Genre and Rating are passed to the Vectorizers.
+        Cleaned Version of Synopsis, Genre and Rating are passed to the Vectorizers.
 
-            Parameters:
-                None
-
-            :return:
-                A list of 3 Similarity Metrices
+        :return: ``list``
+             A list of 3 Similarity Metrices
                     - Synopsis
                     - Genre
                     - Rating
@@ -69,17 +62,18 @@ class AnimeRecommendation:
 
     def getID(self, anime_name):
         """
-            GET the ID of the Anime given Name of the Anime.
+        GET the ID of the Anime given Name of the Anime.
 
-            getID() uses Anime Dataset to get the mapping of Anime Name to Anime ID.
-            Function can return one or more ID's.
+        getID() uses Anime Dataset to get the mapping of Anime Name to Anime ID.
+        Function can return one or more ID's.
 
-            Parameters:
-                anime_name: Name of the Anime to get a ID.
+        :param anime_name: ``string``
+            anime_name: Name of the Anime to get a ID.
 
-            :return:
-                ID or list of ID's.
+        :return: ``list``
+            ID or list of ID's.
         """
+
         if self.dataframe[['Anime_ID', 'Title']][self.dataframe.Title.str.lower() == anime_name]['Anime_ID'].any():
             return self.dataframe[['Anime_ID', 'Title']][self.dataframe.Title.str.lower() == anime_name]['Anime_ID'].values
 
@@ -87,78 +81,81 @@ class AnimeRecommendation:
 
     def getTitle(self, anime_id):
         """
-            GET the Title of the Anime given the ID.
+        GET the Title of the Anime given the ID.
 
-            Parameters:
-                anime_id: ID of the Anime.
+        :param anime_id: ``integer``
+            ID of the Anime.
 
-            :return:
-                Title (or Name) of the Anime.
+        :return: ``string``
+            Title (or Name) of the Anime.
         """
+
         return self.dataframe[['Anime_ID', 'Title']][self.dataframe['Anime_ID'] == anime_id].iloc[0]['Title']
 
     def getSynopsis(self, anime_id):
         """
-            GET Synopsis (or short summary) of the Anime.
+        GET Synopsis (or short summary) of the Anime.
 
-            Parameters:
-                anime_id: ID of the Anime.
+        :param anime_id: ``integer``
+            ID of the Anime.
 
-            :return:
-                Full Synopsis of the Anime.
+        :return: ``string``
+            Full Synopsis of the Anime.
         """
+
         return self.dataframe[['Anime_ID', 'Synopsis']][self.dataframe['Anime_ID'] == anime_id].iloc[0]['Synopsis']
 
     def getGenre(self, anime_id):
         """
-            GET the Genre of the Anime.
+        GET the Genre of the Anime.
 
-            Parameters:
-                anime_id: ID of the Anime.
+        :param anime_id: ``integer``
+            ID of the Anime.
 
-            :return:
-                All the Genre for the given Anime.
+        :return: ``list``
+            All the Genre for the given Anime.
         """
+
         return self.dataframe[['Anime_ID', 'Genre']][self.dataframe['Anime_ID'] == anime_id].iloc[0]['Genre']
 
     def getImage(self, anime_id):
         """
-            GET the Images of the Anime.
+        GET the Images of the Anime.
 
-            Parameters:
-                anime_id: ID of the Anime.
+        :param anime_id: ``integer``
+            ID of the Anime.
 
-            :return:
-                Image URL
+        :return: ``URL``
+            Image URL
         """
+
         return self.dataframe[['Anime_ID', 'Image_URL']][self.dataframe['Anime_ID'] == anime_id].iloc[0]['Image_URL']
 
     def getMapping(self):
         """
-            Mapping of Anime Dataset Index to Anime ID.
+        Mapping of Anime Dataset Index to Anime ID.
 
-            Parameters:
-                None
-
-            :return:
-                pandas Series Object.
+        :return: ``pandas series object``
         """
-        return pd.Series(self.dataframe.index, index = self.dataframe['Anime_ID'])
+
+        return pd.Series(self.dataframe.index, index=self.dataframe['Anime_ID'])
 
     def getRecommendation(self, anime_id, similarity_matrix, indices):
         """
-            Recommend Similar Anime based on the given anime and the similarity matrix.
+        Recommend Similar Anime based on the given anime and the similarity matrix.
 
-            Score of each similarity matrix are combined by taking a mean() and sorted in
-            non-descreasing order to get the most similar animes.
+        Score of each similarity matrix are combined by taking a mean() and
+        sorted in non-descreasing order to get the most similar animes.
 
-            Parameters:
-                anime_id: ID of the Anime.
-                similarity_matrix: Similarity Matrix to use for recommendation.
-                indices: Mapping of Index to Anime ID.
+        :param anime_id: ``integer``
+            ID of the Anime.
+        :param similarity_matrix: ``list of list``
+            Similarity Matrix to use for recommendation.
+        :param indices: ``series object``
+            Mapping of Index to Anime ID.
 
-            :return:
-                List of ID's that are most similar.
+        :return: ``list``
+            List of ID's that are most similar.
         """
 
         # Get the Index of the Anime.
@@ -193,33 +190,24 @@ class AnimeRecommendation:
 
     def getAnime_byGenre(self, genre):
         """
-            GET Top 20 animes that belong to a certain Genre.
+        GET Top 20 animes that belong to a certain Genre.
 
-            Parameters:
-                genre: Value of the Genre to get animes.
+        :param genre: ``string``
+            Value of the genre to get animes.
 
-            :return:
-                Array of Anime IDs.
+        :return: ``array``
+            array of anime ids.
         """
         return self.dataframe[['Anime_ID', 'Genre']][self.dataframe.Genre.str.lower().str.contains(genre)]['Anime_ID'].sample(10).values
 
-    def getAnimeSample(self):
-        """
-            :return:
-                12 randomly sampled animes.
-        """
-
-        return self.dataframe['Anime_ID'].sample(12).values
-
     def build_AnimeDict(self, anime_id):
         """
-            Create a Ordered Dictionary of Anime Name, Synopsis andd Genres.
+        Create a Ordered Dictionary of Anime Name, Synopsis andd Genres.
 
-            Parameters:
-                anime_id: Name of the Anime
+        :param anime_id: ``integer``
+            ID of the Anime.
 
-            :return:
-                Ordered Dictionary
+        :return: ``Ordered Dictionary``
         """
 
         anime_dict = OrderedDict([
@@ -233,5 +221,5 @@ class AnimeRecommendation:
 
 
 if __name__ == "__main__":
-    print ("[ERROR] Import the Class.\n")
+    print("[ERROR] Import the Class.\n")
     exit(-1)
