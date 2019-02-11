@@ -5,7 +5,7 @@ from recommender_system.recommendation import AnimeRecommendation
 from recommender_system.helpers import df_to_html, read_data, update_data
 
 # Path to the database
-db_path = "/home/yash/Anime-Recommender-System/data/dataset.db"
+db_path = "/path/to/the/database.db"
 
 # Variable to store SQL Queries
 q = None
