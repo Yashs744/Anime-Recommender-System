@@ -3,6 +3,7 @@
 		Jikan (https://github.com/jikan-me/jikan) as an API Endpoint of MAL.
 """
 import json
+import os
 import requests
 import time
 import pandas as pd
@@ -12,8 +13,24 @@ from preprocess import cleanSynopsis, cleanTitle, processSynopsis, processRating
 
 # Top Anime / Seasonal Animes
 
-# Read the dataframe that contains Anime ID
-df = getSeasonalAnimes(season="winter", year=2017)
+# Fetch Seasonal Animes and save it to a CSV.
+getSeasonalAnimes(season="winter", year=2017).to_csv('anime.csv', index=False)
+
+# Load the csv in a data frame and remove the CSV file.
+df = pd.read_csv('anime.csv')
+os.remove('anime.csv')
+
+# Create an in-memory SQLlite Database
+conn = sql.connect('dataset.db')
+
+# Fetch all the IDs of anime currently available in the database.
+existing = pd.read_sql_query('SELECT Anime_ID FROM Animes;', con=conn)
+mask = df['IDx'].isin(existing['Anime_ID'])
+
+# Drop all the available IDs from the new data frame.
+df = df.drop(df.loc[mask].index)
+
+# Retrieve Anime ID and Anime Title
 id_list = list(df['IDx'])
 title_list = list(df['Title'])
 
@@ -30,6 +47,9 @@ anime_content = list()
 # failed anime IDs
 anime_failed = list()
 
+# Counter to count number of animes fetched
+count = 0
+
 # for each anime ID in the list. do
 for idx, title in zip(id_list, title_list):
 	try:
@@ -41,8 +61,9 @@ for idx, title in zip(id_list, title_list):
 		# Checking whether response to the request is success or not
 		if raw_content.status_code == 429:
 			'''
-				Reponse 429:
-					Too Many Requests - You've either hit your daily limit or Jikan has hit the rate limit from MyAnimeList
+				:response 429:
+					Too Many Requests - You've either hit your daily limit or 
+					Jikan has hit the rate limit from MyAnimeList
 			'''
 			print("[!] Too many Requests made...\n")
 			print("[!] Aborting....")
@@ -66,7 +87,7 @@ for idx, title in zip(id_list, title_list):
 				genres = ", ".join([g['name'] for g in anime_json_data['genre']])
 
 				# Tuple of Anime Information
-				anime = (idx, anime_json_data['title'], anime_json_data['title_english'], str(anime_json_data['synopsis']),
+				anime = (idx, anime_json_data['title'], str(anime_json_data['synopsis']),
 					anime_json_data['episodes'], anime_json_data['premiered'], genres, anime_json_data['rating'],
 					anime_json_data['score'], anime_json_data['scored_by'], anime_json_data['rank'],
 					anime_json_data['popularity'], anime_json_data['members'], anime_json_data['favorites'],
@@ -78,8 +99,17 @@ for idx, title in zip(id_list, title_list):
 				# Anime Information Successfull ADDED.
 				print("[X] Success\n")
 
-				# sleep for 1/2 sec
-				time.sleep(0.5)
+				# Download in batched of 10 animes at a time
+				if count == 10:
+					# reset the counter
+					count = 0
+					# sleep for 1 second.
+					time.sleep(1)
+				else:
+					# Increment the counter by 1
+					count += 1
+					# sleep of 1/2 second.
+					time.sleep(0.5)
 
 			else:
 				# Display the Error Message
@@ -97,7 +127,8 @@ for idx, title in zip(id_list, title_list):
 		anime_failed.append((idx, title))
 		continue
 
-anime_cols = ["Anime_ID", "Title", "Title English", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By", "Rank", "Popularity", "Members", "Favorites", "Image_URL"]
+anime_cols = ["Anime_ID", "Title", "Synopsis", "Episodes", "Premiered", "Genre", "Rating", "Score", "Scored_By",
+			  "Rank","Popularity", "Members", "Favorites", "Image_URL"]
 failed_cols = ["IDx", "Title"]
 
 anime_df = pd.DataFrame(anime_content, columns=anime_cols)
@@ -112,20 +143,13 @@ anime_df['cSynopsis'] = anime_df.Synopsis.apply(processSynopsis)
 anime_df['cGenre'] = anime_df.Genre.str.lower()
 anime_df['cRating'] = anime_df.Rating.apply(processRatings)
 
-# Create an in-memory SQLlite Database
-conn = sql.connect('dataset.db')
-
 # save to the database
 try:
 	anime_df.to_sql(name='Animes', con=conn, index=False, if_exists='append')
 except Exception as e:
-	existing = pd.read_sql_query('SELECT Anime_ID FROM Animes', con=conn)
-	mask = anime_df['Anime_ID'].isin(existing['Anime_ID'])
+	# if query to update the database fails, save the data into a csv file.
+	anime_df.to_csv("fetched_animes.csv", index=False)
+	print(f"[!] {e}")
 
-	try:
-		anime_df = anime_df.drop(anime_df.loc[mask].index)
-		anime_df.to_sql(name='Animes', con=conn, index=False, if_exists='append')
-	except Exception as e:
-		print (f"[!] {e}")
-
+# Close the connection
 conn.close()
