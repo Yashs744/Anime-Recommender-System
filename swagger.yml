@@ -35,6 +35,27 @@ paths:
                 img_url:
                   type: string
 
+    post:
+      operationId: Anime.addCount
+      tags:
+        - Anime
+      summary: Add View Count to Anime
+      description: Increase the view count of anime each time it is searched.
+      parameters:
+        - name: anime_name
+          in: body
+          description: Anime Ratings either 1 or 0
+          required: True
+          schema:
+            type: object
+            properties:
+              anime_name:
+                type: string
+                description: Name of the seached Anime
+      responses:
+        201:
+          description: Successfully Added View Count.
+
   /anime:
     get:
       operationId: Anime.returnRecommended
@@ -65,33 +86,6 @@ paths:
                   type: string
         404:
           description: Anime Not Found
-
-    post:
-      operationId: Anime.createRatings
-      tags:
-        - Anime
-      summary: Create Ratings in the form of 1 or 0 between the given Anime and Anime recommended.
-      description: Create Rating between Anime.
-      parameters:
-        - name: anime_ratings
-          in: body
-          description: Anime Ratings either 1 or 0
-          required: True
-          schema:
-            type: object
-            properties:
-              main_anime_name:
-                type: string
-                description: Name of the given Anime to find Recommendations.
-              recomm_anime_name:
-                type: string
-                description: Name of the Recommended Anime
-              rating:
-                type: integer
-                description: Rating either 1 or 0.
-      responses:
-        201:
-          description: Successfully Added Rating.
 
   /anime/{genre}:
     get:
