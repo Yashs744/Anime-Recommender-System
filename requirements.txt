@@ -1,5 +1,6 @@
-connexion
-flask
-scikit-learn
-pandas
-numpy
+pandas==0.22.0
+requests==2.18.4
+numpy==1.16.0
+Flask==1.0
+beautifulsoup4==4.7.1
+scikit_learn==0.20.2

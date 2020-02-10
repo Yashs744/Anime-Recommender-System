@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Anime Recommendation</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="/static/css/jquery-ui.css">
+		<link rel="stylesheet" href="/static/css/home.css"/>
+	</head>
+	<body>
+		<!-- Header -->
+			<header id="header" class="alt">
+				<div class="logo"><a href="#header">Anime Recommendation <span>by Psychic Computing Machine</span></a></div>
+			</header>
+
+		<!-- Banner -->
+			<section id="banner">
+				<div class="inner">
+					<header>
+						<h1>Anime Recommender System</h1>
+						<p>
+							Anime Recommendation based using Anime Synopsis, Genre and Ratings.<br/>
+							The System uses TF-IDF & Count Vectorizer followerd by a Linear Kernel to recommend anime that are most similar.
+						</p>
+						<p>
+							List of Available Animes in the Database can be found <a href="/available_animes">here</a>.
+						</p>
+					</header>
+					<div class="container">
+						<form id = "input_box">
+							<div class="form-group">
+								<label for="AnimeName">Anime</label>
+								<input type="text" class="form-control" id="AnimeName" aria-describedby="help"
+									   placeholder="Name of the Anime for Recommendation"
+									   @focus="isFocused = true" @blur="isFocused = false">
+							</div>
+							<button type="submit" id = "getSimilar" class="btn btn-primary">RECOMMEND</button>
+						</form>
+					</div>
+				</div>
+			</section>
+
+		<!-- Main -->
+			<div class = "rows" id="main">
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="copyright">
+					<ul class="icons">
+						<li><a href="https://twitter.com/Yashs744" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="https://github.com/Yashs744" class="icon fa-github"><span class="label">Github</span></a></li>
+						<li><a href="#" class="icon fa-reddit"><span class="label">Reddit</span></a></li>
+					</ul>
+					<p>&copy; Psychic Computing Machine</p>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src = "/static/js/jquery.min.js"></script>
+			<script src = "/static/js/jquery-ui.js"></script>
+			<script src = "/static/js/jquery.scrolly.min.js"></script>
+			<script src = "/static/js/jquery.scrollex.min.js"></script>
+			<script src = "/static/js/skel.min.js"></script>
+			<script src = "/static/js/util.js"></script>
+			<script src = "/static/js/main.js"></script>
+			<script src = "/static/js/home.js"></script>
+			<script type="text/javascript">
+				$(function() {
+					$("#AnimeName").autocomplete({
+						source:function(request, response) {
+							$.getJSON("/autocomplete/" + $('#AnimeName').val(), {}, function(data) {
+								response(data.title_list.slice(0, 6));
+							});
+						},
+						minLength: 2
+					});
+				})
+		</script>
+	</body>
+</html>
