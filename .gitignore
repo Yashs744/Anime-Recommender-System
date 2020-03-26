@@ -1,5 +1,6 @@
-*.txt
 *.pyc
-*.csv
-*.db
-*.db.sqbpro
+*.pyo
+.settings
+local_settings.py
+.idea
+migrations
