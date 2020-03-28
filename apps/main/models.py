@@ -55,7 +55,7 @@ class Genre(models.Model):
         verbose_name = "anime genre"
 
     anime = models.ForeignKey(Anime, verbose_name="anime info", related_name="genre", on_delete=models.CASCADE)
-    name = models.CharField(verbose_name="Name of Genre", max_length=10)
+    name = models.CharField(verbose_name="Name of Genre", max_length=20)
 
     def __str__(self):
         return f"{self.name}"
