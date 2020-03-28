@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block contentblock %}
+    <!-- Banner -->
+    <section id="banner">
+        <div class="inner">
+            <header>
+                <h1>Anime Recommender System</h1>
+                <p>
+                    Anime Recommendation based using Anime Synopsis, Genre and Ratings.<br/>
+                </p>
+            </header>
+            <div class="container">
+                <form id = "input_box" action='/' method="post">
+                    <div class="form-group">
+                        {% csrf_token %}
+                        {{ form }}
+                    </div>
+                    <button type="submit" id = "getSimilar" class="btn btn-primary">RECOMMEND</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main -->
+    <div class = "rows" id="main">
+        <!-- Section -->
+        <section class="wrapper style1">
+            <div class="inner">
+                    <div class="flex flex-2">
+                        <div class="col col1">
+                            <div class="image fit">
+                                <img src="{{ anime.image }}" alt="" />
+                            </div>
+                        </div>
+                        <div class="col col2">
+                            <h3>{{ anime.name }} ({{ anime.name_english }})</h3>
+                            <p class = "synopsis">{{ anime.synopsis }}</p>
+                            <p class = "genres">
+                                {% for genre in anime.genres %}
+                                    <span class="genre">{{ genre }}</span>
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+            </div>
+        </section>
+    </div>
+
+{% endblock %}
