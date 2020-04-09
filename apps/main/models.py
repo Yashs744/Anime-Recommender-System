@@ -13,17 +13,20 @@ class Anime(models.Model):
 
     synopsis = models.TextField(verbose_name="Summary (Synopsis)", validators=[MinLengthValidator(limit_value=100)])
 
-    episodes = models.IntegerField(verbose_name="Number of Episodes")
+    episodes = models.IntegerField(verbose_name="Number of Episodes", blank=True, null=True)
 
     premiered = models.TextField(verbose_name="Premiered", blank=True)
 
     rating = models.TextField(verbose_name="Ratings", blank=True)
 
-    score = models.FloatField(verbose_name="Weighted Score", null=True)
-    scored_by = models.IntegerField(verbose_name="Scored By", null=True)
+    score = models.FloatField(verbose_name="Weighted Score", null=True, blank=True)
+    scored_by = models.IntegerField(verbose_name="Scored By", null=True, blank=True)
 
-    rank = models.IntegerField(verbose_name="Overall Rank")
-    popularity = models.IntegerField(verbose_name="Overall Popularity")
+    rank = models.IntegerField(verbose_name="Overall Rank", null=True)
+    popularity = models.IntegerField(verbose_name="Overall Popularity", null=True, blank=True)
+    members = models.IntegerField(verbose_name="Members", null=True)
+
+    source = models.CharField(verbose_name="Source of Anime", max_length=25, null=True)
 
     image = models.URLField(verbose_name="Image URL")
 
