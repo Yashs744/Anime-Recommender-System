@@ -675,7 +675,7 @@ ul {
 		z-index: 10001;
 	}
 
-		#header > .logo {
+		#header > .home {
 			display: inline-block;
 			height: inherit;
 			left: 1.25em;
@@ -686,12 +686,42 @@ ul {
 			top: 0;
 		}
 
+		#header > .logo {
+			display: inline-block;
+			height: inherit;
+			line-height: inherit;
+			top: 50%;
+  			left: 50%;
+			margin: 0;
+			padding: 0;
+			position: absolute;
+			float: none;
+ 			 transform: translate(-50%, -50%);
+		}
+
+		#header > .ua {
+			display: block;
+			height: inherit;
+			right: 2.25em;
+			line-height: inherit;
+			margin-right: 10px;
+			padding: 0;
+			position: absolute;
+			float: right;
+		}
+
 			#header > .logo a {
 				font-size: 1.25em;
 				color: #3498db;
 			}
 
-				#header > .logo a:hover {
+			#header > .home a, #header > .ua a {
+				font-size: 1.25em;
+				color: #3498db;
+				margin-left: 20px;
+			}
+
+				#header > .home a:hover, #header > .logo a:hover, #header > .ua a:hover {
 					color: #3498db;
 				}
 
@@ -702,25 +732,25 @@ ul {
 			}
 
 			@media screen and (max-width: 736px) {
-				#header > .logo {
+				#header > .home, #header > .logo, #header > .ua {
 					font-size: 1em;
 				}
 			}
 
 			@media screen and (max-width: 480px) {
-				#header > .logo {
+				#header > .home, #header > .logo, #header > .ua {
 					font-size: 0.8em;
 				}
 			}
 
 			@media screen and (max-width: 360px) {
-				#header > .logo {
+				#header > .home, #header > .logo, #header > .ua {
 					font-size: 0.6em;
 				}
 			}
 
 			@media screen and (max-width: 480px) and (min-width: 360px){
-				#header > .logo {
+				#header > .home, #header > .logo, #header > .ua {
 					font-size: 0.7em;
 				}
 			}

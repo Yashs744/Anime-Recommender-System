@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block headBlock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/ua.css' %}">
+
+    <style>
+        .register100-more {
+            background-image: url("{% static "main/images/register.png" %}");
+        }
+    </style>
+{% endblock %}
+
+{% block contentblock %}
+	<div class="limiter">
+		<div class="container-register100">
+			<div class="wrap-register100">
+				<form class="register100-form validate-form" method="post">
+					<span class="register100-form-title p-b-43">
+						Join ARecSys
+					</span>
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="wrap-input100 validate-input">
+                        {{ form.username }}
+						<span class="focus-input100"></span>
+						<span class="label-input100">Username</span>
+					</div>
+
+					<div class="wrap-input100 validate-input">
+                        {{ form.email }}
+						<span class="focus-input100"></span>
+						<span class="label-input100">Email</span>
+					</div>
+
+					<div class="wrap-input100 validate-input">
+                        {{ form.password1 }}
+						<span class="focus-input100"></span>
+						<span class="label-input100">Password</span>
+					</div>
+
+                    <div class="wrap-input100 validate-input">
+                        {{ form.password2 }}
+						<span class="focus-input100"></span>
+						<span class="label-input100">Password confirmation</span>
+					</div>
+
+                    {% if form.errors %}
+                        <p class=" label label-danger">
+                            {% if form.username.errors %}
+                                {{ form.username.errors }}
+                            {% endif %}
+                            {% if form.email.errors %}
+                                {{ form.email.errors }}
+                            {% endif %}
+                            {% if form.password1.errors %}
+                                {{ form.password1.errors }}
+                            {% endif %}
+                            {% if form.password2.errors %}
+                                {{ form.password2.errors }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+
+					<div class="container-register100-form-btn">
+						<button class="register100-form-btn">
+							Signup
+						</button>
+					</div>
+
+                    <div class="border-top pt-3">
+                        <small class="text-muted">
+                            Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+                        </small>
+                    </div>
+				</form>
+
+				<div class="register100-more">
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block blockScripts %}
+    <script src="{% static "main/js/jquery-3.2.1.min.js" %}"></script>
+    <script src="{% static 'main/js/main.js'%}"></script>
+{% endblock %}
