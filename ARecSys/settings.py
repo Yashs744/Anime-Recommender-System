@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'apps.main',
+    'apps.user_authentication',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +106,11 @@ USE_TZ = False
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
 STATICFILES_DIRS = ( os.path.join('static'), )
+
+LOGIN_REDIRECT_URL = 'index'
+LOGIN_URL = 'login'
+
+LOGOUT_REDIRECT_URL = "/"
 
 try:
     from .local_settings import *

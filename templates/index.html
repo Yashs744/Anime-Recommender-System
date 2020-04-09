@@ -28,12 +28,12 @@
         <section class="wrapper style1">
             <div class="inner">
                     <div class="flex flex-2">
-                        <div class="col col1">
-                            <div class="image fit">
+                        <div class="col-md-auto">
+                            <div class="img-fluid">
                                 <img src="{{ anime.image }}" alt="" />
                             </div>
                         </div>
-                        <div class="col col2">
+                        <div class="col">
                             <h3>{{ anime.name }} ({{ anime.name_english }})</h3>
                             <p class = "synopsis">{{ anime.synopsis }}</p>
                             <p class = "genres">
@@ -47,4 +47,16 @@
         </section>
     </div>
 
+{% endblock %}
+
+{% block blockScripts %}
+    <script>
+        var BTN_1 = document.getElementById('getSimilar');
+
+        function scroll() {
+            document.getElementById('main').scrollIntoView();
+        }
+
+        BTN_1.onclick = scroll();
+    </script>
 {% endblock %}
