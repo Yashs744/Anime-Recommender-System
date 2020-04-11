@@ -33,8 +33,8 @@ class Anime(models.Model):
     def as_dict(self):
         data = {
             'id': self.anime_id,
-            'name': self.title,
-            'name_english': self.title_eng,
+            'title': self.title,
+            'title_english': self.title_eng,
             'synopsis': self.synopsis,
             'episodes': self.episodes,
             'score': self.score,

@@ -1,6 +1,7 @@
 *.pyc
 *.pyo
 .settings
+.log
 local_settings.py
 .idea
 migrations

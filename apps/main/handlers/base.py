@@ -1,69 +1,86 @@
 # Data Pipeline
 import logging
 import requests
+import time
 from django.conf import settings
 from apps.main.constants import ANIME_SEASONAL_YEAR, ANIME_SEASONAL_SEASONS
 from apps.main.models import Anime, Genre
+from django.db.models import Q
 
 logger = logging.getLogger("data-handler")
 
 
-def get_anime_info(anime):
+def retrieve_anime_info(anime: dict):
+    """
+    :param anime:
+    :return:
+    """
+
     info = {
         'anime_id': anime['mal_id'],
         'title': anime['title'],
+        'title_eng': anime['title_english'] if anime.get('title_english', None) else '',
         'synopsis': anime['synopsis'],
-        'episodes': anime['episodes'],
+        'episodes': anime['episodes'] if anime.get('episodes', None) else None,
+        'rating': anime['rating'] if anime.get('rating', None) else '',
         'score': anime['score'],
-        'members': anime['members'],
-        'source': anime['source'],
+        'scored_by': anime['scored_by'] if anime.get('scored_by', None) else None,
+        'rank': anime['rank'] if anime.get('rank', None) else None,
+        'popularity': anime['popularity'] if anime.get('popularity', None) else None,
+        'members': anime['members'] if anime.get('members', None) else None,
+        'source': anime['source'] if anime.get('source', None) else '',
         'image': anime['image_url'],
+        'genres': [genre['name'] for genre in anime['genres']] if anime.get('genres', None) else [],
     }
 
     return info
 
 
-def seasonal_anime_search(year, season):
+def get_anime(anime_id: int, ignore_check: bool = False):
     """
-    :param year:
-    :param season:
+    :param anime_id:
+    :param ignore_check:
     :return:
     """
 
-    assert year in ANIME_SEASONAL_YEAR and season in ANIME_SEASONAL_SEASONS, f"{year} - {season} not available"
+    anime_info = None
+    search_url = f'{settings.JIKAN_BASE_URL}/anime/{anime_id}'
 
-    url = settings.ANIME_SEASON_URL + f"{year}/{season}/"
-    resp = requests.get(url)
+    anime_exist = Anime.objects.filter(anime_id=anime_id)
 
-    if resp.status_code == requests.codes.ok:
-        resp = resp.json()['anime']
+    if ignore_check or (anime_exist and not anime_exist.last().genre.all()):
+        resp = requests.get(search_url)
 
-        for anime in resp:
-            try:
-                info = get_anime_info(anime)
+        if resp.status_code == requests.codes.ok:
+            resp = resp.json()
 
-                anime_obj = Anime.objects.create(**info)
-                genre_objs = (Genre(anime=anime_obj, name=genre['name']) for genre in anime['genres'])
-                anime_obj.genre.bulk_create(genre_objs)
-            except Exception as e:
-                logger.error(e)
-    else:
-        logger.info(f"{resp.status_code}")
+            anime_data = retrieve_anime_info(anime=resp)
+            data = anime_data.copy()
+            data.pop('genres')
+
+            Anime.objects.update_or_create(anime_id=anime_id, defaults=data)
+            obj = Anime.objects.get(anime_id=anime_id)
+            if anime_data['genres']:
+                genre_objs = (Genre(anime=obj, name=genre) for genre in anime_data['genres'])
+                obj.genre.bulk_create(genre_objs)
+
+            anime_info = obj.as_dict()
+            time.sleep(4)
+        else:
+            logger.info(resp.status_code)
+
+    return anime_info
 
 
-def search_anime(name: str):
+def fetch_animes(name: str):
     """
+    Method to fetch anime which doesn't exist in the database currently.
+
     :param name:
     :return:
     """
-    data = {
-        'anime_id': None,
-        'title': None,
-        'synopsis': None,
-        'score': None,
-        'episodes': None,
-        'image': None,
-    }
+
+    anime_list = list()
 
     search_url = settings.ANIME_SEARCH_URL + name
     resp = requests.get(search_url)
@@ -71,22 +88,44 @@ def search_anime(name: str):
     if resp.status_code == requests.codes.ok:
         resp = resp.json()['results']
 
-        for i in range(len(resp)):
-            anime = resp[i]
-
-            data['anime_id'] = anime['mal_id']
-            data['title'] = anime['title']
-            data['synopsis'] = anime['synopsis']
-            data['score'] = anime['score']
-            data['image'] = anime['image_url']
-            data['episodes'] = anime['episodes']
-
+        for anime in resp[:10]:
             try:
-                Anime.objects.create(**data)
+                data = get_anime(anime_id=anime['mal_id'], ignore_check=True)
+                if data:
+                    anime_list.append(data)
             except Exception as e:
-                print(e)
+                logger.debug(e)
     else:
-        logger.info(f"{resp.status_code}")
+        logger.info(resp.status_code)
 
-    return data
+    return anime_list
+
+
+def search_anime(anime_name: str):
+    """
+    Method to search the anime or list of animes from the database.
+
+    :param anime_name:
+    :return:
+    """
+
+    anime_list = list()
+
+    animes = Anime.objects.filter(Q(title__icontains=anime_name) |
+                                  Q(title_eng__icontains=anime_name))
+
+    if animes.exists():
+        for anime in animes:
+            new_info = get_anime(anime_id=anime.anime_id)
+
+            data = new_info if new_info else anime.as_dict()
+            anime_list.append(data)
+    else:
+        anime_list = fetch_animes(name=anime_name)
+
+    if len(anime_list) == 0:
+        anime_list = [anime.as_dict() for anime in Anime.objects.order_by('-score')[:10]]
+
+    return anime_list
+
 

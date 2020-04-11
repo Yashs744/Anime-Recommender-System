@@ -106,6 +106,64 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 STATICFILES_DIRS = ( os.path.join('static'), )
 
+# Jikan API
+JIKAN_BASE_URL = 'https://api.jikan.moe/v3'
+ANIME_SEARCH_URL = JIKAN_BASE_URL + '/search/anime?q='
+ANIME_TOP_URL = JIKAN_BASE_URL + '/top/anime/'
+ANIME_SEASONAL_URL = JIKAN_BASE_URL + '/season/'
+
+LOGFILE = 'arecsys.log'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s '
+                      '%(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        }
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file_handler': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'ERROR',
+            'filename': LOGFILE,
+            'formatter': 'verbose',
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 5,
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console', 'file_handler'],
+        },
+        'django.request': {
+            'handlers': ['console', 'file_handler']
+        },
+        'data-handler': {
+            'handlers': ['console', 'file_handler']
+        },
+    }
+}
+
 try:
     from .local_settings import *
 except ImportError as e:

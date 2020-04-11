@@ -2,20 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Title</title>
     <title>Anime Recommendation</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
 
-    <style>
-        #banner {
-            background-image: url("{% static "main/images/backImage.jpg" %}");
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-    </style>
+    {% block headBlock %}
+    {% endblock %}
 </head>
 <body>
     <!-- Header -->
@@ -33,14 +26,7 @@
         </div>
     </footer>
 
-    <script>
-        var BTN_1 = document.getElementById('getSimilar');
-
-        function scroll() {
-            document.getElementById('main').scrollIntoView();
-        }
-
-        BTN_1.onclick = scroll();
-    </script>
+    {% block scriptBlock %}
+    {% endblock %}
 </body>
 </html>
