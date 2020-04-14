@@ -1,4 +1,16 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block headBlock %}
+    <style>
+        #banner {
+            background-image: url("{% static "main/images/backImage.jpg" %}");
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+{% endblock %}
 
 {% block contentblock %}
     <!-- Banner -->
@@ -16,7 +28,8 @@
                         {% csrf_token %}
                         {{ form }}
                     </div>
-                    <button type="submit" id = "getSimilar" class="btn btn-primary">RECOMMEND</button>
+                    <button type="submit" id = "getSimilar" name="search" class="btn btn-primary">Search</button>
+                    <button type="submit" id = "getSimilar" name="recommend" class="btn btn-primary">Recommend</button>
                 </form>
             </div>
         </div>
@@ -25,26 +38,42 @@
     <!-- Main -->
     <div class = "rows" id="main">
         <!-- Section -->
-        <section class="wrapper style1">
-            <div class="inner">
-                    <div class="flex flex-2">
-                        <div class="col col1">
-                            <div class="image fit">
-                                <img src="{{ anime.image }}" alt="" />
+        {% if animes %}
+            {% for anime in animes %}
+                <section class="wrapper style1">
+                    <div class="inner">
+                        <div class="flex flex-2">
+                            <div class="col col1">
+                                <div class="image flex">
+                                    <img src="{{ anime.image }}" alt="" />
+                                </div>
+                            </div>
+                            <div class="col col2">
+                                <h3>{{ anime.title }}
+                                    {% if anime.title_english %}
+                                        ({{ anime.title_english }})</h3>
+                                    {% else %}
+                                        </h3>
+                                    {% endif %}
+                                <p class = "synopsis">{{ anime.synopsis }}</p>
+                                <p class = "genres">
+                                    {% for genre in anime.genres %}
+                                        <span class="genre">{{ genre }}</span>
+                                    {% endfor %}
+                                </p>
                             </div>
                         </div>
-                        <div class="col col2">
-                            <h3>{{ anime.name }} ({{ anime.name_english }})</h3>
-                            <p class = "synopsis">{{ anime.synopsis }}</p>
-                            <p class = "genres">
-                                {% for genre in anime.genres %}
-                                    <span class="genre">{{ genre }}</span>
-                                {% endfor %}
-                            </p>
-                        </div>
                     </div>
-            </div>
-        </section>
+                </section>
+            {% endfor %}
+        {% endif%}
     </div>
 
+{% endblock %}
+
+{% block blockScripts %}
+    <script>
+        document.getElementById('getSimilar').addEventListener("click",
+            document.getElementById('main').scrollIntoView());
+    </script>
 {% endblock %}

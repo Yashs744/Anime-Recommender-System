@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headBlock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/ua.css' %}">
+
+    <style>
+        .login100-more {
+            background-image: url("{% static "main/images/login.jpg" %}");
+        }
+    </style>
+{% endblock %}
+
+{% block contentblock %}
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<form class="login100-form validate-form" method="post" action="">
+					<span class="login100-form-title p-b-43">
+						Login to continue
+					</span>
+                    {% csrf_token %}
+					<div class="wrap-input100 validate-input">
+                        {{ form.username }}
+						<span class="focus-input100"></span>
+						<span class="label-input100">Username</span>
+					</div>
+
+					<div class="wrap-input100 validate-input">
+						{{ form.password }}
+						<span class="focus-input100"></span>
+						<span class="label-input100">Password</span>
+					</div>
+
+                    {{ form.non_field_errors }}
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">
+							Login
+						</button>
+					</div>
+
+                    <div class="border-top pt-2">
+                        <small class="text-muted">
+                            Need An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+                        </small>
+                    </div>
+				</form>
+
+				<div class="login100-more"></div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block blockScripts %}
+    <script src="{% static "main/js/jquery-3.2.1.min.js" %}"></script>
+    <script src="{% static 'main/js/main.js'%}"></script>
+{% endblock %}

@@ -1,30 +1,25 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from apps.main.models import Anime
 from .forms import AnimeNameForm
-from django.db.models import Q
+from .handlers import search_anime
 
 
 # Create your views here.
 def index(request):
+    """
+    :param request:
+    :return:
+    """
+
+    data = dict()
+
     if request.POST:
         form = AnimeNameForm(request.POST)
-
-        print (form.data.get('anime_name'))
-
         if form.is_valid():
-            anime = Anime.objects.filter(Q(title__icontains=form.data.get('anime_name')) |
-                                         Q(title_eng__icontains=form.data.get('anime_name')))
-
-            if anime:
-                anime_data = anime[0].as_dict()
+            if 'search' in form.data:
+                animes: list = search_anime(anime_name=form.data.get('anime_name'))
+                data['animes'] = animes
     else:
         form = AnimeNameForm()
-        anime_data = Anime.objects.last().as_dict()
 
-    data = {
-        'form': form,
-        'anime': anime_data
-    }
-
+    data['form'] = form
     return render(request, 'index.html', data)

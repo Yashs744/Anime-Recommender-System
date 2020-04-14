@@ -2,25 +2,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Title</title>
     <title>Anime Recommendation</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
 
-    <style>
-        #banner {
-            background-image: url("{% static "main/images/backImage.jpg" %}");
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-    </style>
+    {% block headBlock %}
+    {% endblock %}
 </head>
 <body>
     <!-- Header -->
-    <header id="header" class="alt">
-        <div class="logo"><a href="#header">Anime Recommender System <span>by ARecSys</span></a></div>
+    <header class='nav' id="header" class="alt">
+        <!-- Navbar left Side -->
+        <div class="home">
+            <a href="{% url 'index' %}">Home</a>
+        </div>
+
+        <div class="logo"><a href="">ARecSys</a></div>
+
+        <!-- Navbar Right Side -->
+        <div class="ua">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
     </header>
 
     {% block contentblock %}
@@ -33,14 +44,7 @@
         </div>
     </footer>
 
-    <script>
-        var BTN_1 = document.getElementById('getSimilar');
-
-        function scroll() {
-            document.getElementById('main').scrollIntoView();
-        }
-
-        BTN_1.onclick = scroll();
-    </script>
+    {% block blockScripts %}
+    {% endblock %}
 </body>
 </html>

@@ -1,0 +1,1 @@
+from .base import search_anime
