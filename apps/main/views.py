@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.views.generic import DetailView
+
+from .models import Anime
 from .forms import AnimeNameForm
 from .handlers import search_anime
 
@@ -23,3 +26,9 @@ def index(request):
 
     data['form'] = form
     return render(request, 'index.html', data)
+
+
+class AnimeDetailView(DetailView):
+    model = Anime
+    template_name = 'anime_detail.html'
+    context_object_name = 'anime'
