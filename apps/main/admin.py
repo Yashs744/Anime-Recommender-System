@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.main.models import Genre, Anime
+from apps.main.models import Genre, Anime, AnimeScore
 
 
 # Register your models here.
@@ -14,3 +14,4 @@ class AnimeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Anime, AnimeAdmin)
+admin.site.register(AnimeScore)

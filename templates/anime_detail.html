@@ -45,6 +45,22 @@
                 {% endfor %}
               </div>
             </div>
+            <div class="tag-widget post-tag-container mb-5 mt-5">
+              <div class="tagcloud">
+                <h2>My Score: {{ my_score }}</h2>
+                <hr>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{form.user_anime_score}}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <input type="hidden" name="anime" id="id_anime" value="{{ anime.anime_id }}">
+                </form>
+
+              </div>
+            </div>
+
           </div> <!-- .col-md-8 -->
           <div class="col-lg-4 sidebar pr-lg-5">
             <div class="sidebar-box">

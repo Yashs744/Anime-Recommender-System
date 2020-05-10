@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
 from django.db import models
 
@@ -62,3 +63,16 @@ class Genre(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+
+class AnimeScore(models.Model):
+    class Meta:
+        verbose_name = "anime score"
+
+    anime = models.OneToOneField(Anime, verbose_name="Anime", related_name="anime_score", on_delete=models.CASCADE,
+                                 primary_key=True)
+    username = models.ForeignKey(User, verbose_name="User", related_name="user_score", on_delete=models.CASCADE)
+    user_anime_score = models.IntegerField(verbose_name="My Score")
+
+    def __str__(self):
+        return f"{self.username.username} - {self.anime.title}:{self.user_anime_score}"
