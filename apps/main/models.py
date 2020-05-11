@@ -76,3 +76,14 @@ class AnimeScore(models.Model):
 
     def __str__(self):
         return f"{self.username.username} - {self.anime.title}:{self.user_anime_score}"
+
+    def as_dict(self):
+        data = {
+            'id': self.anime_id,
+            'title': self.anime.title,
+            'rank': self.anime.rank,
+            'image': self.anime.image,
+            'ua_score': self.user_anime_score
+        }
+
+        return data

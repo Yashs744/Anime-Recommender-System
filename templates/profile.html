@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headBlock %}
+    <title>{{ user.userprofile }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/profile.css' %}">
+{% endblock %}
+
+{% block contentblock %}
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card card-profile">
+                        <div style="background-image: url({% static 'main/images/profile_background.jpg' %});" class="card-header"></div>
+                        <div class="card-body text-center"><img src="{{ user.userprofile.image.url }}" class="card-profile-img">
+                            <h3 class="mb-3">{{ user.username }}</h3>
+                            <p class="mb-4">{{ user.bio }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card">
+                        {% if animes %}
+                            <div class="list-group card-list-group">
+                                <div class="list-group-item py-5">
+                                    <h3 class="card-title">Anime</h3>
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <table class="media-table">
+                                                <tbody>
+                                                <tr class="list-table-header">
+                                                    <th class="header-title status"></th>
+                                                    <th class="header-title number">#</th>
+                                                    <th class="header-title timage">Image</th>
+                                                    <th class="header-title ttitle">Title</th>
+                                                    <th class="header-title rank">Rank</th>
+                                                    <th class="header-title score">Score</th>
+                                                </tbody>
+                                                {% for anime in animes %}
+                                                    <tbody class="list-item">
+                                                    <tr class="list-table-data">
+                                                        <td class="data status watching"></td>
+                                                        <td class="data number">{{ anime.num }}</td>
+                                                        <td class="data img">
+                                                            <a href="{% url 'anime-detail' anime.id %}" class="link">
+                                                                <img src="{{ anime.image }}" class="hover-info img">
+                                                            </a>
+                                                        </td>
+                                                        <td class="data ttitle clearfix">
+                                                            <a href="{% url 'anime-detail' anime.id %}" class="link">
+                                                                {{ anime.title }}
+                                                            </a>
+                                                        </td>
+                                                        <td class="data rank">
+                                                            {% if anime.rank %}
+                                                                {{ anime.rank }}
+                                                            {% else %}
+                                                                -
+                                                            {% endif %}
+                                                        </td>
+                                                        <td class="data score">
+                                                            {{ anime.ua_score }}
+                                                        </td>
+                                                        </tr>
+                                                    </tbody>
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="px-3 my-3 text-center">
+                                <h4><a href="{% url 'index' %}">Start Scoring Animes</a></h4>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <form class="card" action="post" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <h3 class="card-title">Edit Profile</h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Email address</label>
+                                        {{ u_form.email }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Bio</label>
+                                        {{p_form.bio }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Profile Photo</label>
+                                        {{ p_form.image }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock contentblock %}
+
