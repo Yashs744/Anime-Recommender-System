@@ -1,0 +1,168 @@
+body{
+    margin-top:20px;
+    background:#eee;
+}
+.card {
+    background-color: #fff;
+    border: 0 solid #eee;
+    border-radius: 0;
+}
+.card {
+    margin-bottom: 30px;
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.1), -1px 0 2px rgba(0,0,0,0.05);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.1), -1px 0 2px rgba(0,0,0,0.05);
+}
+
+.card-profile .card-header {
+    height: 12rem;
+    background-size: cover;
+    background-position: center center
+}
+
+.card-profile-img {
+    max-width: 10rem;
+    margin-top: -6rem;
+    margin-bottom: 1rem;
+    border: 3px solid #fff;
+    border-radius: 100%
+}
+
+.card-header:first-child {
+    border-radius: 0 0 0 0;
+}
+.card-header:first-child {
+    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+}
+.card-header {
+    padding: 1rem 1.25rem;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+}
+.card-header {
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.05);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.05);
+}
+
+.media {
+    color: #CCCCCC !important;
+    font-family: Verdana, Arial;
+    font-size: 11px;
+    text-align: left;
+    margin-top: 16px;
+    min-height: 600px;
+    padding: 0;
+}
+
+.media-body {
+    color: #000000 !important;
+    font-family: Verdana, Arial;
+    font-size: 11px;
+    text-align: left;
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+}
+
+.media-table {
+    font-family: Verdana, Arial;
+    font-size: 11px;
+    text-align: left;
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: #EBEBEB 1px solid;
+}
+
+.media-table > tbody:nth-of-type(2n+1) {
+    background-color: #fcfcfc;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+.media-table .list-table-header .header-title.status {
+    background-image: none;
+    width: 4px;
+}
+.media-table .list-table-header .header-title {
+    background: #F6F6F6 url(https://myanimelist.net/img/pc/ownlist/bar-table-header.png) no-repeat right 7px / 1px 22px;
+    display: table-cell;
+    border-bottom: #EBEBEB 1px solid;
+    height: 36px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.media-table .list-table-header .header-title.number {
+    width: 30px;
+}
+
+.media-table .list-table-header .header-title.timage {
+    width: 100px;
+}
+
+.media-table .list-table-header .header-title.ttitle {
+    padding-left: 8px;
+    text-align: left;
+}
+
+.media-table .list-table-header .header-title.rank {
+    width: 100px;
+}
+
+.media-table .list-table-header .header-title.score {
+    width: 100px;
+}
+
+.media-table .list-table-data .data {
+    display: table-cell;
+    padding: 4px 0;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: #EBEBEB 1px solid;
+}
+
+.media-table .list-table-data .data.img .img {
+    width: 78px;
+    height: 98px;
+    border: #EBEBEB 1px solid;
+}
+
+.media-table .list-table-data .data.img .img .link{
+    display: inline-block;
+}
+
+.media-table .list-table-data .data.ttitle {
+    padding-left: 8px;
+    text-align: left;
+}
+
+.media-table .list-table-data .data.ttitle .link {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.data.ttitle > a.link {
+    color: #1d439b;
+    text-decoration: none;
+}
+
+.media-table .list-table-data .data.rank {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.media-table .list-table-data .data.score {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+

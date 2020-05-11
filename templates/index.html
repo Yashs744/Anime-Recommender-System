@@ -2,6 +2,10 @@
 {% load static %}
 
 {% block headBlock %}
+    <title>Anime Recommendation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <style>
         #banner {
             background-image: url("{% static "main/images/backImage.jpg" %}");
@@ -49,11 +53,11 @@
                                 </div>
                             </div>
                             <div class="col col2">
-                                <h3>{{ anime.title }}
+                                <h3><a href="{% url 'anime-detail' anime.id %}">{{ anime.title }}
                                     {% if anime.title_english %}
-                                        ({{ anime.title_english }})</h3>
+                                        ({{ anime.title_english }})</a></h3>
                                     {% else %}
-                                        </h3>
+                                        </a></h3>
                                     {% endif %}
                                 <p class = "synopsis">{{ anime.synopsis }}</p>
                                 <p class = "genres">

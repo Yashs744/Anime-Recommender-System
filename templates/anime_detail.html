@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headBlock %}
+    <title>{{  anime.title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% endblock %}
+
+{% block contentblock %}
+    <section class="hero-wrap hero-wrap-2" style="background-image: url({% static 'main/images/banner.png' %});">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-end justify-content-center">
+                <div class="col-md-9 pb-5 text-center">
+                    <h1 class="mb-3 title">
+                        <span class="title">
+                            <span class="name">
+                                {{ anime.title }}
+                            </span>
+                            <br>
+                            <span class="title-eng">
+                                {{ anime.title_eng }}
+                            </span>
+                        </span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 order-lg-last">
+              <h2>Synopsis</h2>
+                <hr>
+              <p>{{ anime.synopsis }}</p>
+            <div class="tag-widget post-tag-container mb-5 mt-5">
+              <div class="tagcloud">
+                <h2>Genre</h2>
+                <hr>
+                {% for genre in anime.genre.all %}
+                    <a href="#" class="tag-cloud-link">{{ genre.name }}</a>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="tag-widget post-tag-container mb-5 mt-5">
+              <div class="tagcloud">
+                <h2>My Score: {{ my_score }}</h2>
+                <hr>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{form.user_anime_score}}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <input type="hidden" name="anime" id="id_anime" value="{{ anime.anime_id }}">
+                </form>
+
+              </div>
+            </div>
+          </div> <!-- .col-md-8 -->
+          <div class="col-lg-4 sidebar pr-lg-5">
+            <div class="sidebar-box">
+                <img src={{ anime.image }} alt="" class="img-fluid image flex">
+            </div>
+            <div class="sidebar-box">
+                <div class="container-information">
+                    <h2 class="heading">Information</h2>
+                    <hr />
+                    <div>
+                        <span class="cont_text">Episodes:</span>
+                        {% if anime.episodes %}
+                            {{ anime.episodes }}
+                        {% else %}
+                            Not Found
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span class="cont_text">Premiered: </span>
+                        {% if anime.premiered %}
+                            {{ anime.premiered }}
+                        {% else %}
+                            Not Found
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span class="cont_text">Source: </span>
+                        {% if anime.source %}
+                            {{ anime.source }}
+                        {% else %}
+                            Not Found
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span class="cont_text">Rating: </span>
+                        {% if anime.rating %}
+                            {{ anime.rating }}
+                        {% else %}
+                            Not Found
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-box">
+                <div class="container-stats">
+                    <h2 class="heading">Statistics</h2>
+                    <hr />
+                    <div>
+                        <span class="cont_text">Score: </span>
+                        {% if anime.score %}
+                            {{ anime.score }} (scored by {{ anime.scored_by }} people)
+                        {% else %}
+                            Not Found
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span class="cont_text">Rank: </span>
+                        {% if anime.rank %}
+                            #{{ anime.rank }}
+                        {% else %}
+                            Not Found
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span class="cont_text">Popularity: </span>
+                        {% if anime.popularity %}
+                            {{ anime.popularity }}
+                        {% else %}
+                            Not Found
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock contentblock %}
