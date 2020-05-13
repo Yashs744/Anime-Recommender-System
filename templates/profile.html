@@ -105,6 +105,11 @@
                                     <div class="form-group mb-4">
                                         <label class="form-label">Profile Photo</label>
                                         {{ p_form.image }}
+                                        {% if p_form.image.errors %}
+                                            <p class=" label label-danger">
+                                                {{ p_form.image.errors }}
+                                            </p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
