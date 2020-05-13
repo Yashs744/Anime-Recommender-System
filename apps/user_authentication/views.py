@@ -14,9 +14,6 @@ def register(request):
             form.instance.slug = form.cleaned_data['username']
             form.save()
 
-            username = form.changed_data[0]
-            messages.success(request, f'Account Registered for {username}! You are now logged in!')
-
             new_user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password1'])
             login(request, new_user)
             return redirect('index')
@@ -36,7 +33,6 @@ def profile(request):
             u_form.save()
             p_form.save()
 
-            messages.success(request, f'Your account has been updated!')
             return redirect('profile')
     else:
         u_form = UserUpdateForm(instance=request.user)
