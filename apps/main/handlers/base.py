@@ -88,7 +88,7 @@ def fetch_animes(name: str):
     if resp.status_code == requests.codes.ok:
         resp = resp.json()['results']
 
-        for anime in resp[:10]:
+        for anime in resp[:20]:
             try:
                 data = get_anime(anime_id=anime['mal_id'], ignore_check=True)
                 if data:
