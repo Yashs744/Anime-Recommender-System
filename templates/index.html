@@ -1,43 +1,37 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block headBlock %}
+{% block titleBlock %}
     <title>Anime Recommendation</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <style>
-        #banner {
-            background-image: url("{% static "main/images/backImage.jpg" %}");
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-    </style>
 {% endblock %}
 
 {% block contentblock %}
-    <!-- Banner -->
-    <section id="banner">
-        <div class="inner">
-            <header>
-                <h1>Anime Recommender System</h1>
-                <p>
-                    Anime Recommendation based using Anime Synopsis, Genre and Ratings.<br/>
-                </p>
-            </header>
-            <div class="container">
-                <form id = "input_box" action='/' method="post">
-                    <div class="form-group">
-                        {% csrf_token %}
-                        {{ form }}
+    <div class="site-block-wrap">
+        <div class="owl-carousel with-dots">
+            <div class="site-blocks-cover overlay overlay-2"
+                 style="background-image: url('{% static "main/images/backImage.jpg" %}')" data-aos="fade" id="home-section">
+
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-12 mt-lg-8 text-center">
+                            <h1 class="text-shadow">Anime Recommender System </h1>
+                            <p class="mb-5 text-shadow">
+                                Anime Recommendation based using Anime Synopsis, Genre and Ratings.<br/>
+                            </p>
+                            <form id="input_box" action='/' method="post">
+                                <div class="form-group">
+                                {% csrf_token %}
+                                {{ form.anime_name }}
+                                </div>
+                                <button type="submit" id = "getSimilar" name="search" class="btn btn-primary">Search</button>
+                                <button type="submit" id = "getSimilar" name="recommend" class="btn btn-primary">Recommend</button>
+                            </form>
+                        </div>
                     </div>
-                    <button type="submit" id = "getSimilar" name="search" class="btn btn-primary">Search</button>
-                    <button type="submit" id = "getSimilar" name="recommend" class="btn btn-primary">Recommend</button>
-                </form>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Main -->
     <div class = "rows" id="main">

@@ -2,32 +2,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% block headBlock %}
+    {% block titleBlock %}
     {% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'main/fonts/icomoon/style.css' %}">
+    {% block stylesheet %}
+    {% endblock %}
     <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
 </head>
 <body>
-    <!-- Header -->
-    <header class='nav' id="header" class="alt">
-        <!-- Navbar left Side -->
-        <div class="home">
-            <a href="{% url 'index' %}">Home</a>
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-6 col-xl-2">
+                    <h1 class="mb-0 site-logo m-0 p-0">
+                        <a href="{% url 'index' %}" class="mb-0">ARecSys</a>
+                    </h1>
+                </div>
+
+                <div class="col-12 col-md-10 d-none d-xl-block">
+                    <nav class="site-navigation position-relative text-right" role="navigation">
+                        <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+                            <li><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
+                                <li><a href="{% url 'logout' %}?next={{request.path}}" class="nav-link">Logout</a></li>
+                            {% else %}
+                                <li><a href="{% url 'login' %}?next={{request.path}}" class="nav-link">Login</a></li>
+                                <li><a href="{% url 'register' %}" class="nav-link">Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-6 d-inline-block d-xl-none ml-md-0 py-3">
+                    <a href="#" class="site-menu-toggle js-menu-toggle text-white float-right">
+                        <span class="icon-menu h3"></span>
+                    </a>
+                </div>
+            </div>
         </div>
 
-        <div class="logo"><a href="">ARecSys</a></div>
-
-        <!-- Navbar Right Side -->
-        <div class="ua">
-            {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}?next={{request.path}}">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}?next={{request.path}}">Login</a>
-                <a href="{% url 'register' %}">Register</a>
-            {% endif %}
-        </div>
     </header>
 
     {% block contentblock %}
@@ -40,6 +67,10 @@
         </div>
     </footer>
 
+    <script src="{% static "main/js/jquery-3.3.1.min.js" %}"></script>
+    <script src="{% static "main/js/bootstrap.min.js" %}"></script>
+
+    <script src="{% static 'main/js/base.js'%}"></script>
     {% block blockScripts %}
     {% endblock %}
 </body>
