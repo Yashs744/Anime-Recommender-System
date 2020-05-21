@@ -2,31 +2,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% block headBlock %}
+    {% block titleBlock %}
     {% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'main/fonts/icomoon/style.css' %}">
+    {% block stylesheet %}
+    {% endblock %}
     <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
 </head>
 <body>
-    <!-- Header -->
-    <header class='nav' id="header" class="alt">
-        <!-- Navbar left Side -->
-        <div class="home">
-            <a href="{% url 'index' %}">Home</a>
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
         </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
 
-        <div class="logo"><a href="">ARecSys</a></div>
+    <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-6 col-xl-2">
+                    <h1 class="mb-0 site-logo m-0 p-0">
+                        <a href="{% url 'index' %}" class="mb-0">ARecSys</a>
+                    </h1>
+                </div>
 
-        <!-- Navbar Right Side -->
-        <div class="ua">
-            {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}?next={{request.path}}">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}?next={{request.path}}">Login</a>
-                <a href="{% url 'register' %}">Register</a>
-            {% endif %}
+                <div class="col-12 col-md-10 d-none d-xl-block">
+                    <nav class="site-navigation position-relative text-right" role="navigation">
+                        <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+                            <li><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
+                                <li><a href="{% url 'logout' %}?next={{request.path}}" class="nav-link">Logout</a></li>
+                            {% else %}
+                                <li><a href="{% url 'login' %}?next={{request.path}}" class="nav-link">Login</a></li>
+                                <li><a href="{% url 'register' %}" class="nav-link">Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-6 d-inline-block d-xl-none ml-md-0 py-3">
+                    <a href="#" class="site-menu-toggle js-menu-toggle text-white float-right">
+                        <span class="icon-menu h3"></span>
+                    </a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -34,12 +60,57 @@
     {% endblock %}
 
     <!-- Footer -->
-    <footer id="footer">
-        <div class="copyright">
-            <p>&copy; For Educational Purposes</p>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-8">
+                <h2 class="footer-heading mb-4">About ARecSys</h2>
+                <p>This project was developed by Yash Sharma and Ashish Jha under the guidance of Profressor Filippov Evgeny Vasilyevich for the subject Software Developement </p>
+                  <p>
+                      Yash Sharma and Ashish Jha
+                      <br>
+                      Masters Student
+                      <br>
+                      Faculty of Computer Science and Technology
+                      <br>
+                      Saint Petersburg Electrotechnical University "LETI"
+                      <br>
+                      Saint Petersburg, Russian Federation
+                  </p>
+              </div>
+              <div class="col-md-4 mx-auto">
+                <h2 class="footer-heading mb-4">Quick Links</h2>
+                <ul class="list-unstyled">
+                    <li><a href="https://etu.ru/">ETU LETI</a></li>
+                    <li><a href="https://github.com/Yashs744">Expert #1 (Yash Sharma)</a></li>
+                    <li><a href="https://github.com/murdockbleak">Expert #2 (Ashish Jha)</a></li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
         </div>
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <div class="border-top pt-5">
+            <p class="copyright">
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </footer>
 
+    <script src="{% static "main/js/jquery-3.3.1.min.js" %}"></script>
+    <script src="{% static "main/js/bootstrap.min.js" %}"></script>
+
+    <script src="{% static 'main/js/base.js'%}"></script>
     {% block blockScripts %}
     {% endblock %}
 </body>

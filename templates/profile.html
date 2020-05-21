@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block headBlock %}
-    <title>{{ user.userprofile }}</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+{% block titleBlock %}
+    <title>{{ user.userprofile }}</title>
+{% endblock %}
+{% block stylesheet %}
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/profile.css' %}">
 {% endblock %}
 
 {% block contentblock %}
-    <section class="ftco-section">
+    <section class="ftco-section" style="background: #F8F8F8;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4">

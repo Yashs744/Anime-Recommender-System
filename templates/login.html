@@ -1,19 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block headBlock %}
-    <title>Anime Recommendation</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+{% block titleBlock %}
+    <title>Login</title>
+{% endblock %}
+{% block stylesheet %}
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/util.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/ua.css' %}">
-
-    <style>
-        .login100-more {
-            background-image: url("{% static "main/images/login.jpg" %}");
-        }
-    </style>
 {% endblock %}
 
 {% block contentblock %}
@@ -52,7 +45,7 @@
                     </div>
 				</form>
 
-				<div class="login100-more"></div>
+				<div class="login100-more" style="background-image: url('{% static "main/images/login.jpg" %}');"></div>
 			</div>
 		</div>
 	</div>
@@ -60,6 +53,5 @@
 {% endblock %}
 
 {% block blockScripts %}
-    <script src="{% static "main/js/jquery-3.2.1.min.js" %}"></script>
     <script src="{% static 'main/js/main.js'%}"></script>
 {% endblock %}

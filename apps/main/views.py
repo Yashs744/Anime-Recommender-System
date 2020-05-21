@@ -1,17 +1,39 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
-from django.views.generic import DetailView, FormView
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 
+from .handlers.recommend import get_similar
 from .models import Anime, AnimeScore
 from .forms import AnimeNameForm, AnimeScoreForm
 from .handlers import search_anime
 
 
 # Create your views here.
+def index(request):
+    """
+    :param request:
+    :return:
+    """
+
+    data = dict()
+
+    if request.POST:
+        form = AnimeNameForm(request.POST)
+        if form.is_valid():
+            if 'search' in form.data:
+                animes: list = search_anime(anime_name=form.data.get('anime_name'))
+                data['animes'] = animes
+    else:
+        form = AnimeNameForm()
+
+    data['form'] = form
+    return render(request, 'index.html', data)
+
+
 def index(request):
     """
     :param request:
@@ -100,3 +122,28 @@ class AnimeView(View):
     def post(self, request, *args, **kwargs):
         view = AnimeScoreView.as_view()
         return view(request, *args, **kwargs)
+
+
+class RecommendView(TemplateView):
+
+    template_name = 'recommend.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        try:
+            anime = Anime.objects.get(anime_id=kwargs.get('pk'))
+
+            anime_id = anime.anime_id
+            anime_synopsis = anime.synopsis
+        except Anime.DoesNotExist:
+            raise Http404("Anime does not exist")
+
+        similar_anime_ids = get_similar(anime_id=anime_id, anime_synopsis=anime_synopsis)
+        similar_animes = Anime.objects.filter(anime_id__in=similar_anime_ids)
+
+        context['animes'] = []
+        for anime in similar_animes:
+            context['animes'].append(anime.as_dict())
+
+        return context

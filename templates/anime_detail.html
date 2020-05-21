@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block headBlock %}
+{% block titleBlock %}
     <title>{{  anime.title }}</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% endblock %}
 
 {% block contentblock %}
-    <section class="hero-wrap hero-wrap-2" style="background-image: url({% static 'main/images/banner.png' %});">
+    <section class="hero-wrap hero-wrap-2" style="background-image: url({% static 'main/images/detail.jpg' %});">
         <div class="overlay"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-end justify-content-center">
@@ -44,6 +42,13 @@
                     <a href="#" class="tag-cloud-link">{{ genre.name }}</a>
                 {% endfor %}
               </div>
+            </div>
+            <div class="tag-widget post-tag-container mb-5 mt-5">
+                <div class="tagcloud">
+                    <h2>Recommendation</h2>
+                    <hr>
+                    <a href="{% url 'recommend-anime' anime.anime_id %}">Get Recommendation</a>
+                </div>
             </div>
             <div class="tag-widget post-tag-container mb-5 mt-5">
               <div class="tagcloud">
