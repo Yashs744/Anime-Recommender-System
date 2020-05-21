@@ -24,7 +24,6 @@
                                 {{ form.anime_name }}
                                 </div>
                                 <button type="submit" id = "getSimilar" name="search" class="btn btn-primary">Search</button>
-                                <button type="submit" id = "getSimilar" name="recommend" class="btn btn-primary">Recommend</button>
                             </form>
                         </div>
                     </div>
@@ -34,44 +33,51 @@
     </div>
 
     <!-- Main -->
-    <div class = "rows" id="main">
-        <!-- Section -->
-        {% if animes %}
+    {% if animes %}
+    <section class="ftco-section">
+        <div class="container">
             {% for anime in animes %}
-                <section class="wrapper style1">
-                    <div class="inner">
-                        <div class="flex flex-2">
-                            <div class="col col1">
-                                <div class="image flex">
-                                    <img src="{{ anime.image }}" alt="" />
-                                </div>
-                            </div>
-                            <div class="col col2">
-                                <h3><a href="{% url 'anime-detail' anime.id %}">{{ anime.title }}
-                                    {% if anime.title_english %}
-                                        ({{ anime.title_english }})</a></h3>
-                                    {% else %}
-                                        </a></h3>
-                                    {% endif %}
-                                <p class = "synopsis">{{ anime.synopsis }}</p>
-                                <p class = "genres">
-                                    {% for genre in anime.genres %}
-                                        <span class="genre">{{ genre }}</span>
-                                    {% endfor %}
-                                </p>
+                <div class="row">
+                    <div class="col-lg-8 order-lg-last">
+                        <h3><a href="{% url 'anime-detail' anime.id %}">{{ anime.title }}
+                            {% if anime.title_english %}
+                                ({{ anime.title_english }})</a>
+                            {% else %}
+                                </a>
+                            {% endif %}
+                        </h3>
+                        <h2>Synopsis</h2>
+                        <hr>
+                        <p>{{ anime.synopsis }}</p>
+                        <div class="tag-widget post-tag-container mb-5 mt-5">
+                            <div class="tagcloud">
+                                <h2>Genre</h2>
+                                <hr>
+                                {% for genre in anime.genres %}
+                                    <a href="#" class="tag-cloud-link">{{ genre }}</a>
+                                {% endfor %}
                             </div>
                         </div>
+                        <div class="tag-widget post-tag-container mb-5 mt-5">
+                            <div class="tagcloud">
+                                <h2>Recommendation</h2>
+                                <hr>
+                                <a href="{% url 'recommend-anime' anime.id %}">Get Recommendation</a>
+                            </div>
+                        </div>
+                    </div> <!-- .col-md-8 -->
+                    <div class="col-lg-4 sidebar pr-lg-5">
+                        <div class="sidebar-box">
+                            <img src={{ anime.image }} alt="" class="img-fluid image flex">
+                        </div>
                     </div>
-                </section>
+                </div>
+                <br/>
+                <hr/>
+                <br/>
             {% endfor %}
-        {% endif%}
-    </div>
+        </div>
+    </section>
+    {% endif %}
 
-{% endblock %}
-
-{% block blockScripts %}
-    <script>
-        document.getElementById('getSimilar').addEventListener("click",
-            document.getElementById('main').scrollIntoView());
-    </script>
 {% endblock %}

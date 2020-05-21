@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titleBlock %}
+    <title>Anime Recommendation</title>
+{% endblock %}
+
+{% block contentblock %}
+
+    <section class="hero-wrap hero-wrap-2" style="background-image: url({% static 'main/images/recommend.jpg' %});">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-end justify-content-center">
+                <div class="col-md-9 pb-5 text-center">
+                    <h1 class="mb-3 title">
+                        <span class="title">
+                            <span class="name">
+                                Recommendations
+                            </span>
+                            <br>
+                        </span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main -->
+    <section class="ftco-section">
+        <div class="container">
+            {% if animes %}
+                {% for anime in animes %}
+                    <div class="row">
+                        <div class="col-lg-8 order-lg-last">
+                            <h3><a href="{% url 'anime-detail' anime.id %}">{{ anime.title }}
+                                {% if anime.title_english %}
+                                    ({{ anime.title_english }})</a>
+                                {% else %}
+                                    </a>
+                                {% endif %}
+                            </h3>
+                            <h2>Synopsis</h2>
+                            <hr>
+                            <p>{{ anime.synopsis }}</p>
+                            <div class="tag-widget post-tag-container mb-5 mt-5">
+                                <div class="tagcloud">
+                                    <h2>Genre</h2>
+                                    <hr>
+                                    {% for genre in anime.genres %}
+                                        <a href="#" class="tag-cloud-link">{{ genre }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="tag-widget post-tag-container mb-5 mt-5">
+                                <div class="tagcloud">
+                                    <h2>Recommendation</h2>
+                                    <hr>
+                                    <a href="{% url 'recommend-anime' anime.id %}">Get Recommendation</a>
+                                </div>
+                            </div>
+                        </div> <!-- .col-md-8 -->
+                        <div class="col-lg-4 sidebar pr-lg-5">
+                            <div class="sidebar-box">
+                                <img src={{ anime.image }} alt="" class="img-fluid image flex">
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <hr/>
+                    <br/>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

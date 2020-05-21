@@ -1015,10 +1015,6 @@ ul {
 				color: #67b2e4 !important;
 			}
 
-			.wrapper.style2 .image {
-				box-shadow: 0px 0px 0px 7px #3498db, 0px 0px 0px 8px rgba(255, 255, 255, 0.25);
-			}
-
 		@media screen and (max-width: 1280px) {
 
 			.wrapper > .inner {
@@ -1382,76 +1378,27 @@ ul {
 
 /* Footer */
 
-#footer {
-	padding: 6em 2em 4em 2em;
-	background-color: #e2f0fa;
-}
-
-	#footer > .inner {
-		margin: 0 auto;
-		width: 80em;
-	}
-
-	#footer .copyright {
-		color: #4F4F4F;
-		font-size: 1em;
-		margin: 0 0 2em 0;
-		padding: 0;
-		text-align: center;
-	}
-
-		#footer .copyright .icons a {
-			border-radius: 100%;
-			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 4px #FFF, 0px 0px 0px 5px rgba(0, 0, 0, 0.1);
-			display: block;
-			font-size: 1em;
-			height: 3em;
-			line-height: 3em;
-			margin: 0 auto 0.7em;
-			text-align: center;
-			width: 3em;
-
-		}
-
-	.fa-reddit:hover {
-		background-color: #FF4301;
-		color: white;
-	}
-
-	.fa-twitter:hover {
-		background-color: #1DA1F2;
-		color: white;
-	}
-
-	.fa-github:hover {
-		background-color: #000;
-		color: white;
-	}
-
-	@media screen and (max-width: 1280px) {
-
-		#footer > .inner {
-			width: 65em;
-		}
-
-	}
-
-	@media screen and (max-width: 980px) {
-
-		#footer > .inner {
-			width: 90%;
-		}
-
-	}
-
-	@media screen and (max-width: 736px) {
-
-		#footer {
-			padding: 3em 1em 1em 1em;
-		}
-
-	}
-
+.site-footer {
+  padding: 4em 0;
+  background: #333333; }
+  @media (min-width: 768px) {
+    .site-footer {
+      padding: 8em 0; } }
+  .site-footer .border-top {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important; }
+  .site-footer p {
+    color: #737373; }
+  .site-footer h2, .site-footer h3, .site-footer h4, .site-footer h5 {
+    color: #fff; }
+  .site-footer a {
+    color: #999999; }
+    .site-footer a:hover {
+      color: white; }
+  .site-footer ul li {
+    margin-bottom: 10px; }
+  .site-footer .footer-heading {
+    font-size: 16px;
+    color: #fff; }
 
 
 
